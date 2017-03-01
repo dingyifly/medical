@@ -135,6 +135,41 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">毕业院校:</label>
+			<div class="controls">
+				<form:input path="graduate" htmlEscape="false" maxlength="100"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">入职时间:</label>
+			<div class="controls">
+				<input name="entryDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="<fmt:formatDate value="${user.entryDate}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">专业:</label>
+			<div class="controls">
+				<form:input path="major" htmlEscape="false" maxlength="100"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">出生日期:</label>
+			<div class="controls">
+				<input name="birthday" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="<fmt:formatDate value="${user.birthday}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">身份证:</label>
+			<div class="controls">
+				<%-- <form:input path="idNumber" htmlEscape="false" maxlength="18" class="idCardNo"/> --%>
+				<form:input path="idNumber" htmlEscape="false" maxlength="18"/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">用户角色:</label>
 			<div class="controls">
 				<form:checkboxes path="roleIdList" items="${allRoles}" itemLabel="name" itemValue="id" htmlEscape="false" class="required"/>

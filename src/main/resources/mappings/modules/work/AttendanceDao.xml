@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.AttendanceDao">
+    
+	<sql id="attendanceColumns">
+		a.id AS "id",
+		a.date_time AS "dateTime",
+		a.user_id AS "user.id",
+		a.no AS "no",
+		a.am_plan_time AS "amPlanTime",
+		a.am_reality_time AS "amRealityTime",
+		a.pm_play_time AS "pmPlayTime",
+		a.pm_reality_tim AS "pmRealityTim",
+		a.late_flag AS "lateFlag",
+		a.leave_flag AS "leaveFlag",
+		a.absent_flag AS "absentFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="attendanceJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="Attendance">
+		SELECT 
+			<include refid="attendanceColumns"/>
+		FROM work_attendance a
+		<include refid="attendanceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Attendance">
+		SELECT 
+			<include refid="attendanceColumns"/>
+		FROM work_attendance a
+		<include refid="attendanceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="dateTime != null and dateTime != ''">
+				AND a.date_time = #{dateTime}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="no != null and no != ''">
+				AND a.no = #{no}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Attendance">
+		SELECT 
+			<include refid="attendanceColumns"/>
+		FROM work_attendance a
+		<include refid="attendanceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_attendance(
+			id,
+			date_time,
+			user_id,
+			no,
+			am_plan_time,
+			am_reality_time,
+			pm_play_time,
+			pm_reality_tim,
+			late_flag,
+			leave_flag,
+			absent_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{dateTime},
+			#{user.id},
+			#{no},
+			#{amPlanTime},
+			#{amRealityTime},
+			#{pmPlayTime},
+			#{pmRealityTim},
+			#{lateFlag},
+			#{leaveFlag},
+			#{absentFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_attendance SET 	
+			date_time = #{dateTime},
+			user_id = #{user.id},
+			no = #{no},
+			am_plan_time = #{amPlanTime},
+			am_reality_time = #{amRealityTime},
+			pm_play_time = #{pmPlayTime},
+			pm_reality_tim = #{pmRealityTim},
+			late_flag = #{lateFlag},
+			leave_flag = #{leaveFlag},
+			absent_flag = #{absentFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_attendance SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

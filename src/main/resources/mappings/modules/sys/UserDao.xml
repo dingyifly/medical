@@ -75,6 +75,11 @@
 		a.remarks,
 		a.login_flag,
 		a.photo,
+		a.graduate,
+		a.entry_date,
+		a.major,
+		a.birthday,
+		a.id_number,
 		a.create_by AS "createBy.id",
 		a.create_date,
 		a.update_by AS "updateBy.id",
@@ -143,6 +148,17 @@
 		<include refid="userJoins"/><!-- 
 		LEFT JOIN sys_role_office ro ON ro.role_id = r.id -->
 		WHERE a.login_name = #{loginName} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 根据登录名查询用户 -->
+	<select id="getByNo" resultType="User" parameterType="User">
+		SELECT
+			<include refid="userColumns"/><!-- ,
+			ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userJoins"/><!-- 
+		LEFT JOIN sys_role_office ro ON ro.role_id = r.id -->
+		WHERE a.no = #{no} AND a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
 	<!-- 分页查询用户信息 -->
@@ -236,7 +252,12 @@
 			email, 
 			phone, 
 			mobile, 
-			user_type, 
+			user_type,
+			graduate,
+			entry_date,
+			major,
+			birthday,
+			id_number, 
 			create_by, 
 			create_date, 
 			update_by, 
@@ -257,6 +278,11 @@
 			#{phone}, 
 			#{mobile}, 
 			#{userType}, 
+			#{graduate},
+			#{entryDate},
+			#{major},
+			#{birthday},
+			#{idNumber},
 			#{createBy.id}, 
 			#{createDate}, 
 			#{updateBy.id}, 
@@ -281,6 +307,11 @@
 			phone = #{phone}, 
 			mobile = #{mobile}, 
 			user_type = #{userType}, 
+			graduate = #{graduate}, 
+			entry_date = #{entryDate}, 
+			major = #{major}, 
+			birthday = #{birthday}, 
+			id_number = #{idNumber}, 
 			update_by = #{updateBy.id}, 
 			update_date = #{updateDate}, 
 			remarks = #{remarks},
@@ -339,5 +370,10 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+	
+	<select id="idsToNames" resultType="String" parameterType="String">
+		select group_concat(a.name) as names from 
+		(select name from sys_user u where instr(','||#{ids}||',', ','||u.id||',')) a
+	</select>
 	
 </mapper>

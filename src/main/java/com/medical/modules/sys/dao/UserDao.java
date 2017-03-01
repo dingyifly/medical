@@ -23,6 +23,13 @@ public interface UserDao extends CrudDao<User> {
 	 * @return
 	 */
 	public User getByLoginName(User user);
+	
+	/**
+	 * 根据工号查询用户
+	 * @param loginName
+	 * @return
+	 */
+	public User getByNo(User user);
 
 	/**
 	 * 通过OfficeId获取用户列表，仅返回用户id和name（树查询用户时用）
@@ -71,5 +78,12 @@ public interface UserDao extends CrudDao<User> {
 	 * @return
 	 */
 	public int updateUserInfo(User user);
+	
+	/**
+	 * 将id转name
+	 * @param ids (用户id以','分隔)
+	 * @return
+	 */
+	public String idsToNames(String ids);
 
 }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.MeetingDao">
+    
+	<sql id="meetingColumns">
+		a.id AS "id",
+		a.meeting_time AS "meetingTime",
+		a.compere AS "compere.id",
+		a.theme AS "theme",
+		a.participant AS "participant",
+		a.record AS "record",
+		a.recorder AS "recorder.id",
+		a.executive_condition AS "executiveCondition",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u3.name AS "compere.name",
+		u7.name AS "recorder.name"
+	</sql>
+	
+	<sql id="meetingJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.compere
+		LEFT JOIN sys_user u5 ON u5.id = a.participant
+		LEFT JOIN sys_user u7 ON u7.id = a.recorder
+	</sql>
+    
+	<select id="get" resultType="Meeting">
+		SELECT 
+			<include refid="meetingColumns"/>
+		FROM work_meeting a
+		<include refid="meetingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Meeting">
+		SELECT 
+			<include refid="meetingColumns"/>
+		FROM work_meeting a
+		<include refid="meetingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="meetingTime != null and meetingTime != ''">
+				AND a.meeting_time = #{meetingTime}
+			</if>
+			<if test="theme != null and theme != ''">
+				AND a.theme LIKE 
+					<if test="dbName == 'oracle'">'%'||#{theme}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{theme}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{theme},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Meeting">
+		SELECT 
+			<include refid="meetingColumns"/>
+		FROM work_meeting a
+		<include refid="meetingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_meeting(
+			id,
+			meeting_time,
+			compere,
+			theme,
+			participant,
+			record,
+			recorder,
+			executive_condition,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{meetingTime},
+			#{compere.id},
+			#{theme},
+			#{participant},
+			#{record},
+			#{recorder.id},
+			#{executiveCondition},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_meeting SET 	
+			meeting_time = #{meetingTime},
+			compere = #{compere.id},
+			theme = #{theme},
+			participant = #{participant},
+			record = #{record},
+			recorder = #{recorder.id},
+			executive_condition = #{executiveCondition},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_meeting SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

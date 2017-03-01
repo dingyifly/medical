@@ -11,6 +11,7 @@ import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.medical.common.config.Global;
 import com.medical.common.service.BaseService;
 import com.medical.common.utils.CacheUtils;
 import com.medical.common.utils.SpringContextHolder;
@@ -89,6 +90,25 @@ public class UserUtils {
 	}
 	
 	/**
+	 * 根据工号获取用户
+	 * @param loginName
+	 * @return 取不到返回null
+	 */
+	public static User getByNo(String no){
+		User user = (User)CacheUtils.get(USER_CACHE, USER_CACHE_LOGIN_NAME_ + no);
+		if (user == null){
+			user = userDao.getByNo(new User(null, null, no));
+			if (user == null){
+				return null;
+			}
+			user.setRoleList(roleDao.findList(new Role(user)));
+			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
+			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getNo(), user);
+		}
+		return user;
+	}
+	
+	/**
 	 * 清除当前用户缓存
 	 */
 	public static void clearCache(){
@@ -106,8 +126,12 @@ public class UserUtils {
 	 */
 	public static void clearCache(User user){
 		CacheUtils.remove(USER_CACHE, USER_CACHE_ID_ + user.getId());
-		CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName());
-		CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getOldLoginName());
+		if ("username".equals(Global.getConfig("accountMode"))) {
+			CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName());
+			CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getOldLoginName());
+		} else {
+			CacheUtils.remove(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getNo());
+		}
 		if (user.getOffice() != null && user.getOffice().getId() != null){
 			CacheUtils.remove(USER_CACHE, USER_CACHE_LIST_BY_OFFICE_ID_ + user.getOffice().getId());
 		}

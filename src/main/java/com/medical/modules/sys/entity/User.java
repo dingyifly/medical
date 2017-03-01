@@ -50,6 +50,13 @@ public class User extends DataEntity<User> {
 	private String oldLoginIp;	// 上次登陆IP
 	private Date oldLoginDate;	// 上次登陆日期
 	
+	private String graduate;//毕业院校
+	private Date entryDate;//入职时间
+	private String major;//专业
+	private Date birthday;//生日
+	private String idNumber;//身份证
+	
+	
 	private Role role;	// 根据角色查询用户条件
 	
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
@@ -66,6 +73,12 @@ public class User extends DataEntity<User> {
 	public User(String id, String loginName){
 		super(id);
 		this.loginName = loginName;
+	}
+	
+	public User(String id, String loginName, String no){
+		super(id);
+		this.loginName = loginName;
+		this.no = no;
 	}
 
 	public User(Role role){
@@ -320,5 +333,55 @@ public class User extends DataEntity<User> {
 	@Override
 	public String toString() {
 		return id;
+	}
+
+	@Length(min=0, max=100, message="毕业院校长度必须介于 1 和 100 之间")
+	@ExcelField(title="毕业院校", align=2, sort=1000)
+	public String getGraduate() {
+		return graduate;
+	}
+
+	public void setGraduate(String graduate) {
+		this.graduate = graduate;
+	}
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@ExcelField(title="入职时间", align=2, sort=1100)
+	public Date getEntryDate() {
+		return entryDate;
+	}
+
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
+
+	@Length(min=0, max=100, message="专业长度必须介于 1 和 100 之间")
+	@ExcelField(title="专业", align=2, sort=1200)
+	public String getMajor() {
+		return major;
+	}
+
+	public void setMajor(String major) {
+		this.major = major;
+	}
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@ExcelField(title="出生日期", align=2, sort=1300)
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	@Length(min=0, max=100, message="毕业院校长度必须介于 1 和 100 之间")
+	@ExcelField(title="毕业院校", align=2, sort=1000)
+	public String getIdNumber() {
+		return idNumber;
+	}
+
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
 	}
 }

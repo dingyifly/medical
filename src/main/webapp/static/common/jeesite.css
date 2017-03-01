@@ -45,7 +45,7 @@ input.btn:hover {*color:#333333}
 
 .form-search label{margin-left:10px;}
 .form-search span label{margin-left:0;}
-.form-search .ul-form {margin:0;overflow:hidden;}
+.form-search .ul-form {margin:0;overflow:hidden;padding:2px;}
 .form-search .ul-form li{float:left;list-style:none;height:35px;line-height:35px;}
 .form-search .ul-form li label{width:80px;text-align:right;}
 .form-search .ul-form li span label{width:auto;}
