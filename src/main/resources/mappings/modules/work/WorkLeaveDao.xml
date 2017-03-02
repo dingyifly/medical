@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.WorkLeaveDao">
+    
+	<sql id="workLeaveColumns">
+		a.id AS "id",
+		a.start_time AS "startTime",
+		a.end_time AS "endTime",
+		a.leave_type AS "leaveType",
+		a.reason AS "reason",
+		a.apply_time AS "applyTime",
+		a.reality_start_time AS "realityStartTime",
+		a.reality_end_time AS "realityEndTime",
+		a.state AS "state",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u.name AS "createBy.name"
+	</sql>
+	
+	<sql id="workLeaveJoins">
+		left join sys_user u on a.create_by = u.id
+	</sql>
+    
+	<select id="get" resultType="WorkLeave">
+		SELECT 
+			<include refid="workLeaveColumns"/>
+		FROM work_leave a
+		<include refid="workLeaveJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WorkLeave">
+		SELECT 
+			<include refid="workLeaveColumns"/>
+		FROM work_leave a
+		<include refid="workLeaveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="leaveType != null and leaveType != ''">
+				AND a.leave_type = #{leaveType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WorkLeave">
+		SELECT 
+			<include refid="workLeaveColumns"/>
+		FROM work_leave a
+		<include refid="workLeaveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_leave(
+			id,
+			start_time,
+			end_time,
+			leave_type,
+			reason,
+			apply_time,
+			reality_start_time,
+			reality_end_time,
+			state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{startTime},
+			#{endTime},
+			#{leaveType},
+			#{reason},
+			#{applyTime},
+			#{realityStartTime},
+			#{realityEndTime},
+			#{state},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_leave SET 	
+			start_time = #{startTime},
+			end_time = #{endTime},
+			leave_type = #{leaveType},
+			reason = #{reason},
+			apply_time = #{applyTime},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_leave SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

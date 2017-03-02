@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.ReagentRecordDao">
+    
+	<sql id="reagentRecordColumns">
+		a.id AS "id",
+		a.use_date AS "useDate",
+		a.use_flag AS "useFlag",
+		a.user_id AS "user.id",
+		a.project AS "project",
+		a.instructions AS "instructions",
+		a.state AS "state",
+		a.reagent_id AS "reagentId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name"
+	</sql>
+	
+	<sql id="reagentRecordJoins">
+		LEFT JOIN work_reagent b ON b.id = a.reagent_id
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="ReagentRecord">
+		SELECT 
+			<include refid="reagentRecordColumns"/>
+		FROM work_reagent_record a
+		<include refid="reagentRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReagentRecord">
+		SELECT 
+			<include refid="reagentRecordColumns"/>
+		FROM work_reagent_record a
+		<include refid="reagentRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="useFlag != null and useFlag != ''">
+				AND a.use_flag = #{useFlag}
+			</if>
+			<if test="reagentId != null and reagentId != ''">
+				AND a.reagent_id = #{reagentId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReagentRecord">
+		SELECT 
+			<include refid="reagentRecordColumns"/>
+		FROM work_reagent_record a
+		<include refid="reagentRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_reagent_record(
+			id,
+			use_date,
+			use_flag,
+			user_id,
+			project,
+			instructions,
+			state,
+			reagent_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{useDate},
+			#{useFlag},
+			#{user.id},
+			#{project},
+			#{instructions},
+			#{state},
+			#{reagentId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_reagent_record SET 	
+			use_date = #{useDate},
+			use_flag = #{useFlag},
+			user_id = #{user.id},
+			project = #{project},
+			instructions = #{instructions},
+			state = #{state},
+			reagent_id = #{reagentId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_reagent_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE reagent_id = #{reagentId}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

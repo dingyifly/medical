@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.ReagentDao">
+    
+	<sql id="reagentColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.repertory AS "repertory",
+		a.model AS "model",
+		a.descr AS "descr",
+		a.instructions AS "instructions",
+		a.matters AS "matters",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="reagentJoins">
+	</sql>
+    
+	<select id="get" resultType="Reagent">
+		SELECT 
+			<include refid="reagentColumns"/>
+		FROM work_reagent a
+		<include refid="reagentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Reagent">
+		SELECT 
+			<include refid="reagentColumns"/>
+		FROM work_reagent a
+		<include refid="reagentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Reagent">
+		SELECT 
+			<include refid="reagentColumns"/>
+		FROM work_reagent a
+		<include refid="reagentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_reagent(
+			id,
+			name,
+			repertory,
+			model,
+			descr,
+			instructions,
+			matters,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{repertory},
+			#{model},
+			#{descr},
+			#{instructions},
+			#{matters},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_reagent SET 	
+			name = #{name},
+			repertory = #{repertory},
+			model = #{model},
+			descr = #{descr},
+			instructions = #{instructions},
+			matters = #{matters},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_reagent SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
