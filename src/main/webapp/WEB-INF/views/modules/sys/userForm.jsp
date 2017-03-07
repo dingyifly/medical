@@ -9,10 +9,12 @@
 			$("#no").focus();
 			$("#inputForm").validate({
 				rules: {
-					loginName: {remote: "${ctx}/sys/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')}
+					loginName: {remote: "${ctx}/sys/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')},
+					no: {remote: "${ctx}/sys/user/checkNo?oldNo=" + encodeURIComponent('${user.no}')}
 				},
 				messages: {
 					loginName: {remote: "用户登录名已存在"},
+					no: {remote: "工号已经存在"},
 					confirmNewPassword: {equalTo: "输入与上面相同的密码"}
 				},
 				submitHandler: function(form){
@@ -64,7 +66,8 @@
 		<div class="control-group">
 			<label class="control-label">工号:</label>
 			<div class="controls">
-				<form:input path="no" htmlEscape="false" maxlength="50" class="required"/>
+				<input id="oldNo" name="oldNo" type="hidden" value="${user.no}">
+				<form:input path="no" htmlEscape="false" maxlength="50" class="required checkNo"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>

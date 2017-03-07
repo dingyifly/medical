@@ -56,6 +56,7 @@ public class User extends DataEntity<User> {
 	private Date birthday;//生日
 	private String idNumber;//身份证
 	
+	private String oldNo;//原工号
 	
 	private Role role;	// 根据角色查询用户条件
 	
@@ -383,5 +384,13 @@ public class User extends DataEntity<User> {
 
 	public void setIdNumber(String idNumber) {
 		this.idNumber = idNumber;
+	}
+
+	public String getOldNo() {
+		return oldNo;
+	}
+
+	public void setOldNo(String oldNo) {
+		this.oldNo = oldNo;
 	}
 }

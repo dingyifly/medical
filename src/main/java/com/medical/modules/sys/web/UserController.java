@@ -264,6 +264,24 @@ public class UserController extends BaseController {
 		}
 		return "false";
 	}
+	
+	/**
+	 * 验证工号是否存在
+	 * @param oldLoginName
+	 * @param loginName
+	 * @return
+	 */
+	@ResponseBody
+	@RequiresPermissions("sys:user:edit")
+	@RequestMapping(value = "checkNo")
+	public String checkNo(String oldNo, String no) {
+		if (no !=null && no.equals(oldNo)) {
+			return "true";
+		} else if (no !=null && systemService.getUserByNo(no) == null) {
+			return "true";
+		}
+		return "false";
+	}
 
 	/**
 	 * 用户信息显示及保存

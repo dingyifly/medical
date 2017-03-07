@@ -58,7 +58,7 @@
 				<th>状态</th>
 				<th>更新时间</th>
 				<!-- <th>备注信息</th> -->
-				<shiro:hasPermission name="work:interview:edit"><th>操作</th></shiro:hasPermission>
+				<shiro:hasAnyPermissions name="work:interview:edit, work:interview:handle"><th>操作</th></shiro:hasAnyPermissions>
 			</tr>
 		</thead>
 		<tbody>
@@ -82,10 +82,13 @@
 				<%-- <td>
 					${interview.remarks}
 				</td> --%>
-				<shiro:hasPermission name="work:interview:edit"><td>
-    				<a href="${ctx}/work/interview/form?id=${interview.id}">修改</a>
-					<a href="${ctx}/work/interview/delete?id=${interview.id}" onclick="return confirmx('确认要删除该面试吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+				<shiro:hasAnyPermissions name="work:interview:edit,work:interview:handle"><td>
+					<a href="${ctx}/work/interview/form?id=${interview.id}">处理</a>
+					<shiro:hasPermission name="work:interview:edit">
+						<a href="${ctx}/work/interview/form?id=${interview.id}">修改</a>
+						<a href="${ctx}/work/interview/delete?id=${interview.id}" onclick="return confirmx('确认要删除该面试吗？', this.href)">删除</a>
+					</shiro:hasPermission>
+				</td></shiro:hasAnyPermissions>
 			</tr>
 		</c:forEach>
 		</tbody>

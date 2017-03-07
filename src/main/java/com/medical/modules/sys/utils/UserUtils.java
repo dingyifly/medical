@@ -11,6 +11,7 @@ import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.google.common.collect.Lists;
 import com.medical.common.config.Global;
 import com.medical.common.service.BaseService;
 import com.medical.common.utils.CacheUtils;
@@ -46,6 +47,7 @@ public class UserUtils {
 	public static final String USER_CACHE_LIST_BY_OFFICE_ID_ = "oid_";
 
 	public static final String CACHE_ROLE_LIST = "roleList";
+	public static final String CACHE_ROLE_ALL_LIST = "roleAllList";
 	public static final String CACHE_MENU_LIST = "menuList";
 	public static final String CACHE_AREA_LIST = "areaList";
 	public static final String CACHE_OFFICE_LIST = "officeList";
@@ -113,6 +115,7 @@ public class UserUtils {
 	 */
 	public static void clearCache(){
 		removeCache(CACHE_ROLE_LIST);
+		removeCache(CACHE_ROLE_ALL_LIST);
 		removeCache(CACHE_MENU_LIST);
 		removeCache(CACHE_AREA_LIST);
 		removeCache(CACHE_OFFICE_LIST);
@@ -173,6 +176,45 @@ public class UserUtils {
 			putCache(CACHE_ROLE_LIST, roleList);
 		}
 		return roleList;
+	}
+	
+	/**
+	 * 查询用户是否包含某个角色
+	 * @param user
+	 * @param role
+	 * @return
+	 */
+	public static boolean hasRole(User user, String role) {
+		List<Role> roleList = user.getRoleList();
+		List<String> roleNames = Lists.newArrayList();
+		for (Role r : roleList) {
+			roleNames.add(r.getName());
+		}
+		if (roleNames.contains(role)) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 查询用户是否包含某些角色(角色名称以逗号分隔)
+	 * @param user
+	 * @param roles 角色名称
+	 * @return
+	 */
+	public static boolean hasAnyRoles(User user, String roles) {
+		List<Role> roleList = user.getRoleList();
+		List<String> roleNames = Lists.newArrayList();
+		for (Role r : roleList) {
+			roleNames.add(r.getName());
+		}
+		String[] arys = roles.split(",");
+		for (String role : arys) {
+			if (roleNames.contains(role)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -242,6 +284,16 @@ public class UserUtils {
 			officeList = officeDao.findAllList(new Office());
 		}
 		return officeList;
+	}
+	
+	public static List<Role> getRoleAllList() {
+		@SuppressWarnings("unchecked")
+		List<Role> roleList = (List<Role>) getCache(CACHE_ROLE_ALL_LIST);
+		if (roleList == null) {
+			roleList = roleDao.findAllList(new Role());
+			putCache(CACHE_ROLE_ALL_LIST, roleList);
+		}
+		return roleList;
 	}
 	
 	/**

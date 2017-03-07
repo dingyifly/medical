@@ -19,6 +19,7 @@ import com.medical.common.config.Global;
 import com.medical.common.persistence.Page;
 import com.medical.common.web.BaseController;
 import com.medical.common.utils.StringUtils;
+import com.medical.modules.sys.utils.UserUtils;
 import com.medical.modules.work.entity.Interview;
 import com.medical.modules.work.service.InterviewService;
 
@@ -49,6 +50,9 @@ public class InterviewController extends BaseController {
 	@RequiresPermissions("work:interview:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Interview interview, HttpServletRequest request, HttpServletResponse response, Model model) {
+		if (!UserUtils.hasRole(interview.getCurrentUser(), "personnel") || !interview.getCurrentUser().isAdmin()) {
+			interview.setOffice(interview.getCurrentUser().getOffice());
+		}
 		Page<Interview> page = interviewService.findPage(new Page<Interview>(request, response), interview); 
 		model.addAttribute("page", page);
 		return "modules/work/interviewList";

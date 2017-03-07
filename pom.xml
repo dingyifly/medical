@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>com.medical</groupId>
-	<artifactId>jeesite</artifactId>
+	<artifactId>meidcal</artifactId>
 	<version>1.2.6</version>
 	<packaging>war</packaging>
 	
-	<name>JeeSite</name>
-	<url>http://thinkgem.github.com/jeesite</url>
-	<inceptionYear>2012-2014</inceptionYear>
+	<name>medical</name>
+	<url>http://github.com/dingyifly/medical</url>
+	<inceptionYear>2017</inceptionYear>
 	
 	<!-- 项目属性 -->
 	<properties>
