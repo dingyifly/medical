@@ -4,11 +4,14 @@
 package com.medical.modules.work.entity;
 
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.medical.common.persistence.DataEntity;
+import com.medical.modules.sys.utils.DictUtils;
 
 /**
  * 请假管理Entity
@@ -16,6 +19,9 @@ import com.medical.common.persistence.DataEntity;
  * @version 2017-03-02
  */
 public class WorkLeave extends DataEntity<WorkLeave> {
+	
+	public static final String LEAVE_FLAG_DEPT = DictUtils.getDictValue("部门审核", "leave_flag", null);
+	public static final String LEAVE_FLAG_MANAGER = DictUtils.getDictValue("领导审核", "leave_flag", null);
 	
 	private static final long serialVersionUID = 1L;
 	private Date startTime;		// 开始时间

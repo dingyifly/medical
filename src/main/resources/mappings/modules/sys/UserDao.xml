@@ -80,6 +80,7 @@
 		a.major,
 		a.birthday,
 		a.id_number,
+		a.admin_flag,
 		a.create_by AS "createBy.id",
 		a.create_date,
 		a.update_by AS "updateBy.id",

@@ -54,6 +54,76 @@
 		</choose>
 	</select>
 	
+	<select id="findAuditList" resultType="WorkLeave">
+		SELECT 
+			<include refid="workLeaveColumns"/>
+		FROM work_leave a
+		<include refid="workLeaveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.state = #{LEAVE_FLAG_DEPT}
+			<if test="currentUser.adminFlag == null or currentUser.adminFlag == ''">
+				and u.office_id = #{currentUser.office.id}
+			</if>
+			<if test="leaveType != null and leaveType != ''">
+				AND a.leave_type = #{leaveType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAuditCount" resultType="java.lang.Integer">
+		SELECT 
+			count(*)
+		FROM work_leave a
+		<include refid="workLeaveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.state = '0'
+			and u.office_id = #{currentUser.office.id}
+		</where>
+	</select>
+	
+	<select id="findManagerAuditList" resultType="WorkLeave">
+		SELECT 
+			<include refid="workLeaveColumns"/>
+		FROM work_leave a
+		<include refid="workLeaveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.state = '1'
+			<if test="leaveType != null and leaveType != ''">
+				AND a.leave_type = #{leaveType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findManagerAuditCount" resultType="java.lang.Integer">
+		SELECT 
+			count(*)
+		FROM work_leave a
+		<include refid="workLeaveJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.state = '1'
+		</where>
+	</select>
+	
 	<select id="findAllList" resultType="WorkLeave">
 		SELECT 
 			<include refid="workLeaveColumns"/>
@@ -114,6 +184,7 @@
 			end_time = #{endTime},
 			leave_type = #{leaveType},
 			reason = #{reason},
+			state = #{state},
 			apply_time = #{applyTime},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate}

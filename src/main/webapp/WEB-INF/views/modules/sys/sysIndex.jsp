@@ -263,10 +263,11 @@
 				type: 2,
 				title: '待办事项(测试中)',
 				closeBtn: 1, //不显示关闭按钮
-				shade: [0],
+				shade: false,
+				//shadeClose: true,
 				area: ['215px', '340px'],
 				offset: 'rb', //右下角弹出
-				//time: 10000, //2秒后自动关闭
+				time: 10000, //2秒后自动关闭
 				anim: 2,
 				content: ['http://www.baidu.com', 'yes'] //iframe的url， no代表不显示滚动条
 			});

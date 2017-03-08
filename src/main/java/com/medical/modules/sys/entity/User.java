@@ -323,8 +323,18 @@ public class User extends DataEntity<User> {
 		return Collections3.extractToString(roleList, "name", ",");
 	}
 	
+	private String adminFlag;
+	
+	public String getAdminFlag() {
+		return adminFlag;
+	}
+
+	public void setAdminFlag(String adminFlag) {
+		this.adminFlag = adminFlag;
+	}
+
 	public boolean isAdmin(){
-		return isAdmin(this.id);
+		return "1".equals(adminFlag);
 	}
 	
 	public static boolean isAdmin(String id){

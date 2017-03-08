@@ -65,9 +65,8 @@
 				<td>
 					${workLeave.createBy.name}
 				</td>
-				<shiro:hasPermission name="work:workLeave:edit"><td>
-    				<a href="${ctx}/work/workLeave/form?id=${workLeave.id}">修改</a>
-					<a href="${ctx}/work/workLeave/delete?id=${workLeave.id}" onclick="return confirmx('确认要删除该请假吗？', this.href)">删除</a>
+				<shiro:hasPermission name="work:workLeave:audit"><td>
+    				<a href="${ctx}/work/workLeave/toAudit?id=${workLeave.id}">审核</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

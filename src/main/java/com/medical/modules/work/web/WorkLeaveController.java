@@ -3,6 +3,8 @@
  */
 package com.medical.modules.work.web;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +21,7 @@ import com.medical.common.config.Global;
 import com.medical.common.persistence.Page;
 import com.medical.common.web.BaseController;
 import com.medical.common.utils.CommonUtil;
+import com.medical.common.utils.DateUtils;
 import com.medical.common.utils.StringUtils;
 import com.medical.modules.sys.utils.DictUtils;
 import com.medical.modules.work.entity.WorkLeave;
@@ -78,6 +81,7 @@ public class WorkLeaveController extends BaseController {
 		}
 		if (CommonUtil.isEmpty(workLeave.getState())) {
 			workLeave.setState("0");
+			workLeave.setApplyTime(new Date());
 		}
 		workLeaveService.save(workLeave);
 		addMessage(redirectAttributes, "保存请假成功");
@@ -90,6 +94,32 @@ public class WorkLeaveController extends BaseController {
 		workLeaveService.delete(workLeave);
 		addMessage(redirectAttributes, "删除请假成功");
 		return "redirect:"+Global.getAdminPath()+"/work/workLeave/?repage";
+	}
+	
+	@RequiresPermissions("work:workLeave:audit")
+	@RequestMapping(value = "auditList")
+	public String auditList(WorkLeave workLeave, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<WorkLeave> page = workLeaveService.findAuditPage(new Page<WorkLeave>(request, response), workLeave); 
+		model.addAttribute("page", page);
+		return "modules/work/workLeaveAuditList";
+	}
+	
+	@RequiresPermissions("work:workLeave:audit")
+	@RequestMapping(value = "toAudit")
+	public String toAudit(WorkLeave workLeave, Model model) {
+		model.addAttribute("workLeave", workLeave);
+		return "modules/work/workLeaveAudit";
+	}
+	
+	@RequiresPermissions("work:workLeave:audit")
+	@RequestMapping(value = "audit")
+	public String audit(WorkLeave workLeave, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, workLeave)){
+			return form(workLeave, model);
+		}
+		workLeaveService.save(workLeave);
+		addMessage(redirectAttributes, "审核请假成功");
+		return "redirect:"+Global.getAdminPath()+"/work/workLeave/auditList?repage";
 	}
 
 }

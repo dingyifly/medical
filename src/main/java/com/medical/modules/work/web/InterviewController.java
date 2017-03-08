@@ -50,7 +50,7 @@ public class InterviewController extends BaseController {
 	@RequiresPermissions("work:interview:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Interview interview, HttpServletRequest request, HttpServletResponse response, Model model) {
-		if (!UserUtils.hasRole(interview.getCurrentUser(), "personnel") || !interview.getCurrentUser().isAdmin()) {
+		if (!UserUtils.hasRole(interview.getCurrentUser(), "personnel") && !interview.getCurrentUser().isAdmin()) {
 			interview.setOffice(interview.getCurrentUser().getOffice());
 		}
 		Page<Interview> page = interviewService.findPage(new Page<Interview>(request, response), interview); 

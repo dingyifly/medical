@@ -162,6 +162,9 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	@Override
 	public boolean isPermitted(PrincipalCollection principals, Permission permission) {
 		authorizationValidate(permission);
+		if (UserUtils.getUser().isAdmin()) {
+			return true;
+		}
 		return super.isPermitted(principals, permission);
 	}
 	

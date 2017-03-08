@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.medical.common.persistence.Page;
 import com.medical.common.service.CrudService;
+import com.medical.modules.sys.utils.UserUtils;
 import com.medical.modules.work.entity.WorkLeave;
 import com.medical.modules.work.dao.WorkLeaveDao;
 
@@ -42,6 +43,27 @@ public class WorkLeaveService extends CrudService<WorkLeaveDao, WorkLeave> {
 	@Transactional(readOnly = false)
 	public void delete(WorkLeave workLeave) {
 		super.delete(workLeave);
+	}
+
+	/**
+	 * 查找待审核列表
+	 * @param page
+	 * @param workLeave
+	 * @return
+	 */
+	public Page<WorkLeave> findAuditPage(Page<WorkLeave> page,
+			WorkLeave workLeave) {
+			workLeave.setPage(page);
+		if (UserUtils.hasRole(workLeave.getCurrentUser(), "manager")) {
+			page.setList(dao.findManagerAuditList(workLeave));
+		} else {
+			page.setList(dao.findAuditList(workLeave));
+		}
+		return page;
+	}
+
+	public void audit(WorkLeave workLeave) {
+		
 	}
 	
 }
