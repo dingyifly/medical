@@ -100,12 +100,12 @@
 				<form:textarea path="matters" htmlEscape="false" rows="4" class="input-xxlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
-		</div>
+		</div> --%>
 			<div class="control-group">
 				<label class="control-label">化学试剂记录表：</label>
 				<div class="controls">

@@ -81,7 +81,7 @@
 		<div class="control-group">
 			<label class="control-label">执行情况：</label>
 			<div class="controls">
-				<form:input path="executiveCondition" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea path="executiveCondition" htmlEscape="false" rows="4" class="input-xxlarge "/>
 			</div>
 		</div>
 		<%-- <div class="control-group">

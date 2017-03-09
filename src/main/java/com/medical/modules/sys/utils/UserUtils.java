@@ -188,7 +188,7 @@ public class UserUtils {
 		List<Role> roleList = user.getRoleList();
 		List<String> roleNames = Lists.newArrayList();
 		for (Role r : roleList) {
-			roleNames.add(r.getName());
+			roleNames.add(r.getEnname());
 		}
 		if (roleNames.contains(role)) {
 			return true;
@@ -206,7 +206,7 @@ public class UserUtils {
 		List<Role> roleList = user.getRoleList();
 		List<String> roleNames = Lists.newArrayList();
 		for (Role r : roleList) {
-			roleNames.add(r.getName());
+			roleNames.add(r.getEnname());
 		}
 		String[] arys = roles.split(",");
 		for (String role : arys) {

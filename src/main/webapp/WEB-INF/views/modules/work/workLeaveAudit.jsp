@@ -62,17 +62,15 @@
 		<div class="control-group">
 			<label class="control-label">请假类型：</label>
 			<div class="controls">
-				<form:select readonly="readonly" path="leaveType" class="input-xlarge required">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('oa_leave_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-				<span class="help-inline"><font color="red">*</font> </span>
+				${fns:getDictLabel(workLeave.leaveType, 'oa_leave_type', '')}
+				<form:hidden path="leaveType"/>
+				<span class="help-inline"></span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">请假理由：</label>
 			<div class="controls">
-				<form:textarea readonly="readonly" path="reason" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge required"/>
+				<form:textarea readonly="true" path="reason" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>

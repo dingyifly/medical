@@ -28,7 +28,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/meeting/">会议列表</a></li>
-		<li class="active">查看</li>
+		<li class="active"><a href="javascript:void(0)">查看</a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="meeting" action="${ctx}/work/meeting/info" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -37,56 +37,57 @@
 			<label class="control-label">会议时间：</label>
 			<div class="controls">
 				<input name="meetingTime" type="text" readonly="readonly" maxlength="20" class="input-medium"
-					value="<fmt:formatDate value="${meeting.meetingTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					value="<fmt:formatDate value="${meeting.meetingTime}" pattern="yyyy-MM-dd"/>"
 					/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">主持人：</label>
 			<div class="controls">
-				<input class="input-xlarge" value="${meeting.compere.id.name}" readonly="readonly">
+				<input type="text" class="input-xlarge" value="${meeting.compere.name}" readonly="readonly">
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">主题：</label>
 			<div class="controls">
-				<form:input readonly="readonly" path="theme" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
+				<form:input readonly="true" path="theme" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">参加会议人员：</label>
 			<div class="controls">
-				<input class="input-xlarge" value="${meeting.participant.name}" readonly="readonly">
-				<span class="help-inline"><font color="red">*</font> </span>
+				<%-- <input type="text" class="input-xlarge" value="${meeting.participantNames}" readonly="readonly">
+				<span class="help-inline"><font color="red">*</font> </span> --%>
+				<font size="4">${meeting.participantNames}</font>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">会议记录：</label>
 			<div class="controls">
-				<form:textarea readonly="readonly" path="record" htmlEscape="false" rows="4" class="input-xxlarge "/>
+				<form:textarea readonly="true" path="record" htmlEscape="false" rows="4" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">记录员：</label>
 			<div class="controls">
-				<input class="input-xlarge" value="${meeting.recorder.id.name}" readonly="readonly">
+				<input type="text" class="input-xlarge" value="${meeting.recorder.name}" readonly="readonly">
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">执行情况：</label>
 			<div class="controls">
-				<form:input readonly="readonly" path="executiveCondition" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea readonly="true" path="executiveCondition" htmlEscape="false" rows="4" class="input-xxlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
-				<form:textarea readonly="readonly" path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:textarea readonly="true" path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
-		</div>
+		</div> --%>
 		<div class="form-actions">
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>

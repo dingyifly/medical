@@ -55,7 +55,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="meeting">
 			<tr>
-				<td><a href="${ctx}/work/meeting/form?id=${meeting.id}">
+				<td><a href="${ctx}/work/meeting/view?id=${meeting.id}">
 					<fmt:formatDate value="${meeting.meetingTime}" pattern="yyyy-MM-dd"/>
 				</a></td>
 				<td>
