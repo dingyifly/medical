@@ -40,13 +40,13 @@
 				<th>库存</th>
 				<th>型号</th>
 				<th>描述</th>
-				<shiro:hasPermission name="work:reagent:edit"><th>操作</th></shiro:hasPermission>
+				<shiro:hasAnyPermissions name="work:reagent:use,work:reagent:edit"><th>操作</th></shiro:hasAnyPermissions>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="reagent">
 			<tr>
-				<td><a href="${ctx}/work/reagent/form?id=${reagent.id}">
+				<td><a href="${ctx}/work/reagent/view?id=${reagent.id}">
 					${reagent.name}
 				</a></td>
 				<td>
@@ -58,10 +58,15 @@
 				<td>
 					${reagent.descr}
 				</td>
-				<shiro:hasPermission name="work:reagent:edit"><td>
-    				<a href="${ctx}/work/reagent/form?id=${reagent.id}">修改</a>
-					<a href="${ctx}/work/reagent/delete?id=${reagent.id}" onclick="return confirmx('确认要删除该化学试剂吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+				<shiro:hasAnyPermissions name="work:reagent:use,work:reagent:edit">
+					<td>
+						<a href="${ctx}/work/reagent/toUse?id=${reagent.id}">使用</a>
+						<shiro:hasPermission name="work:reagent:edit">
+	    				<a href="${ctx}/work/reagent/form?id=${reagent.id}">修改</a>
+						<a href="${ctx}/work/reagent/delete?id=${reagent.id}" onclick="return confirmx('确认要删除该化学试剂吗？', this.href)">删除</a>
+						</shiro:hasPermission>
+					</td>
+				</shiro:hasAnyPermissions>
 			</tr>
 		</c:forEach>
 		</tbody>

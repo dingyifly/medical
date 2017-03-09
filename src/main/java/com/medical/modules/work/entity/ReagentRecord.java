@@ -24,7 +24,7 @@ public class ReagentRecord extends DataEntity<ReagentRecord> {
 	private String project;		// 使用项目
 	private String instructions;		// 说明
 	private String state;		// 审核状态
-	private Reagent reagentId;		// 试剂id 父类
+	private Reagent reagent;		// 试剂id 父类
 	
 	public ReagentRecord() {
 		super();
@@ -34,8 +34,8 @@ public class ReagentRecord extends DataEntity<ReagentRecord> {
 		super(id);
 	}
 
-	public ReagentRecord(Reagent reagentId){
-		this.reagentId = reagentId;
+	public ReagentRecord(Reagent reagent){
+		this.reagent = reagent;
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -92,12 +92,12 @@ public class ReagentRecord extends DataEntity<ReagentRecord> {
 	}
 	
 	@Length(min=0, max=64, message="试剂id长度必须介于 0 和 64 之间")
-	public Reagent getReagentId() {
-		return reagentId;
+	public Reagent getReagent() {
+		return reagent;
 	}
 
-	public void setReagentId(Reagent reagentId) {
-		this.reagentId = reagentId;
+	public void setReagent(Reagent reagent) {
+		this.reagent = reagent;
 	}
 	
 }

@@ -52,7 +52,7 @@ public class ReagentService extends CrudService<ReagentDao, Reagent> {
 			}
 			if (ReagentRecord.DEL_FLAG_NORMAL.equals(reagentRecord.getDelFlag())){
 				if (StringUtils.isBlank(reagentRecord.getId())){
-					reagentRecord.setReagentId(reagent);
+					reagentRecord.setReagent(reagent);
 					reagentRecord.preInsert();
 					reagentRecordDao.insert(reagentRecord);
 				}else{
@@ -62,6 +62,17 @@ public class ReagentService extends CrudService<ReagentDao, Reagent> {
 			}else{
 				reagentRecordDao.delete(reagentRecord);
 			}
+		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void saveRecord(ReagentRecord record) {
+		if (StringUtils.isBlank(record.getId())){
+			record.preInsert();
+			reagentRecordDao.insert(record);
+		}else{
+			record.preUpdate();
+			reagentRecordDao.update(record);
 		}
 	}
 	

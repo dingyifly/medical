@@ -256,7 +256,6 @@
 	</script>
 	<script src="${ctxStatic}/common/wsize.min.js" type="text/javascript"></script>
 	
-	<script src="${ctxStatic}/layer/layer.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(function(){
 			layer.open({

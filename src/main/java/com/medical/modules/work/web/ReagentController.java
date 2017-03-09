@@ -17,9 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.medical.common.config.Global;
 import com.medical.common.persistence.Page;
-import com.medical.common.web.BaseController;
 import com.medical.common.utils.StringUtils;
+import com.medical.common.web.BaseController;
 import com.medical.modules.work.entity.Reagent;
+import com.medical.modules.work.entity.ReagentRecord;
 import com.medical.modules.work.service.ReagentService;
 
 /**
@@ -91,5 +92,25 @@ public class ReagentController extends BaseController {
 	public String counter(Model model) {
 		return "modules/work/counter";
 	}
-
+	
+	@RequiresPermissions("work:reagent:use")
+	@RequestMapping(value = "toUse")
+	public String toUse(Reagent reagent, ReagentRecord reagentRecord, Model model) {
+		reagentRecord.setReagent(reagent);
+		model.addAttribute("record", reagentRecord);
+		return "modules/work/reagentUse";
+	}
+	
+	@RequiresPermissions("work:reagent:use")
+	@RequestMapping(value = "addRecord")
+	public String addRecord(ReagentRecord reagentRecord, Model model) {
+		if (StringUtils.isBlank(reagentRecord.getId())) {
+			reagentRecord.setState("0");
+		}
+		reagentRecord.setUser(reagentRecord.getCurrentUser());
+		reagentService.saveRecord(reagentRecord);
+		model.addAttribute("record", reagentRecord);
+		return "modules/work/reagentUse";
+	}
+	
 }

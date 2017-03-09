@@ -10,7 +10,7 @@
 		a.project AS "project",
 		a.instructions AS "instructions",
 		a.state AS "state",
-		a.reagent_id AS "reagentId",
+		a.reagent_id AS "reagent.id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -43,8 +43,8 @@
 			<if test="useFlag != null and useFlag != ''">
 				AND a.use_flag = #{useFlag}
 			</if>
-			<if test="reagentId != null and reagentId != ''">
-				AND a.reagent_id = #{reagentId}
+			<if test="reagent != null and reagent != ''">
+				AND a.reagent_id = #{reagent.id}
 			</if>
 		</where>
 		<choose>
@@ -99,7 +99,7 @@
 			#{project},
 			#{instructions},
 			#{state},
-			#{reagentId},
+			#{reagent.id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -117,7 +117,7 @@
 			project = #{project},
 			instructions = #{instructions},
 			state = #{state},
-			reagent_id = #{reagentId},
+			reagent_id = #{reagent.id},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
@@ -132,7 +132,7 @@
 				WHERE id = #{id}
 			</when>
 			<otherwise>
-				WHERE reagent_id = #{reagentId}
+				WHERE reagent_id = #{reagent.id}
 			</otherwise>
 		</choose>
 	</update>
