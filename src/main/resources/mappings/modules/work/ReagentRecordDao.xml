@@ -6,6 +6,7 @@
 		a.id AS "id",
 		a.use_date AS "useDate",
 		a.use_flag AS "useFlag",
+		a.num AS "num",
 		a.user_id AS "user.id",
 		a.project AS "project",
 		a.instructions AS "instructions",
@@ -17,12 +18,16 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u4.name AS "user.name"
+		u4.name AS "user.name",
+		u4.office_id AS "user.office_id",
+		b.name AS "reagent.name",
+		c.name AS "user.office.name"
 	</sql>
 	
 	<sql id="reagentRecordJoins">
 		LEFT JOIN work_reagent b ON b.id = a.reagent_id
 		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+		LEFT JOIN sys_office c on u4.office_id = c.id
 	</sql>
     
 	<select id="get" resultType="ReagentRecord">
@@ -80,6 +85,7 @@
 			id,
 			use_date,
 			use_flag,
+			num,
 			user_id,
 			project,
 			instructions,
@@ -95,6 +101,7 @@
 			#{id},
 			#{useDate},
 			#{useFlag},
+			#{num},
 			#{user.id},
 			#{project},
 			#{instructions},
@@ -136,5 +143,36 @@
 			</otherwise>
 		</choose>
 	</update>
+	
+	<select id="findAuditList" resultType="ReagentRecord">
+		SELECT 
+			<include refid="reagentRecordColumns"/>
+		FROM work_reagent_record a
+		<include refid="reagentRecordJoins"/>
+		<where>
+			a.del_flag = #{record.DEL_FLAG_NORMAL}
+			<if test="record.useFlag != null and record.useFlag != ''">
+				AND a.use_flag = #{record.useFlag}
+			</if>
+			<if test="record.reagent != null and record.reagent != ''">
+				AND a.reagent_id = #{record.reagent.id}
+			</if>
+			<if test="flag == '1'">
+				AND state = '0'
+				AND u4.office_id = #{record.currentUser.office.id}	
+			</if>
+			<if test="flag == null || flag == ''">
+				AND state = '1'
+			</if>
+		</where>
+		<choose>
+			<when test="record.page !=null and record.page.orderBy != null and record.page.orderBy != ''">
+				ORDER BY ${record.page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
 	
 </mapper>

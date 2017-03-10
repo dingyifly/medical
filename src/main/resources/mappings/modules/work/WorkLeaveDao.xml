@@ -86,7 +86,7 @@
 		<include refid="workLeaveJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			and a.state = '0'
+			and a.state = #{LEAVE_FLAG_DEPT}
 			and u.office_id = #{currentUser.office.id}
 		</where>
 	</select>
@@ -98,7 +98,7 @@
 		<include refid="workLeaveJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			and a.state = '1'
+			and a.state = #{LEAVE_FLAG_MANAGER}
 			<if test="leaveType != null and leaveType != ''">
 				AND a.leave_type = #{leaveType}
 			</if>
@@ -120,7 +120,7 @@
 		<include refid="workLeaveJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			and a.state = '1'
+			and a.state =  #{LEAVE_FLAG_MANAGER}
 		</where>
 	</select>
 	

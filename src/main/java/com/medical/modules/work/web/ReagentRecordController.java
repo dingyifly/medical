@@ -17,11 +17,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.medical.common.config.Global;
 import com.medical.common.persistence.Page;
+import com.medical.common.utils.CommonUtil;
 import com.medical.common.utils.StringUtils;
 import com.medical.common.web.BaseController;
 import com.medical.modules.work.entity.Reagent;
 import com.medical.modules.work.entity.ReagentRecord;
-import com.medical.modules.work.service.ReagentService;
+import com.medical.modules.work.service.ReagentRecordService;
 
 /**
  * 化学试剂管理Controller
@@ -29,69 +30,69 @@ import com.medical.modules.work.service.ReagentService;
  * @version 2017-03-02
  */
 @Controller
-@RequestMapping(value = "${adminPath}/work/reagent")
-public class ReagentController extends BaseController {
+@RequestMapping(value = "${adminPath}/work/reagentRecord")
+public class ReagentRecordController extends BaseController {
 
 	@Autowired
-	private ReagentService reagentService;
+	private ReagentRecordService reagentRecordService;
 	
 	@ModelAttribute
-	public Reagent get(@RequestParam(required=false) String id) {
-		Reagent entity = null;
+	public ReagentRecord get(@RequestParam(required=false) String id) {
+		ReagentRecord entity = null;
 		if (StringUtils.isNotBlank(id)){
-			entity = reagentService.get(id);
+			entity = reagentRecordService.get(id);
 		}
 		if (entity == null){
-			entity = new Reagent();
+			entity = new ReagentRecord();
 		}
 		return entity;
 	}
 	
-	@RequiresPermissions("work:reagent:view")
+	@RequiresPermissions("work:reagent:use")
 	@RequestMapping(value = {"list", ""})
-	public String list(Reagent reagent, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<Reagent> page = reagentService.findPage(new Page<Reagent>(request, response), reagent); 
+	public String list(ReagentRecord record, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<ReagentRecord> page = reagentRecordService.findPage(new Page<ReagentRecord>(request, response), record); 
 		model.addAttribute("page", page);
-		return "modules/work/reagentList";
+		return "modules/work/reagentRecordList";
 	}
 
-	@RequiresPermissions("work:reagent:view")
+	@RequiresPermissions("work:reagent:use")
 	@RequestMapping(value = "form")
-	public String form(Reagent reagent, Model model) {
-		model.addAttribute("reagent", reagent);
+	public String form(ReagentRecord record, Model model) {
+		model.addAttribute("reagentRecord", record);
 		return "modules/work/reagentForm";
 	}
 	
-	@RequiresPermissions("work:reagent:view")
+	@RequiresPermissions("work:reagent:use")
 	@RequestMapping(value = "view")
-	public String view(Reagent reagent, Model model) {
-		model.addAttribute("reagent", reagent);
+	public String view(ReagentRecord record, Model model) {
+		model.addAttribute("reagentRecord", record);
 		return "modules/work/reagentInfo";
 	}
 
-	@RequiresPermissions("work:reagent:edit")
+	@RequiresPermissions("work:reagent:use")
 	@RequestMapping(value = "save")
-	public String save(Reagent reagent, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, reagent)){
-			return form(reagent, model);
+	public String save(ReagentRecord record, Model model, RedirectAttributes redirectAttributes) {
+		/*if (!beanValidator(model, record)){
+			return form(record, model);
+		}*/
+		if (CommonUtil.isEmpty(record.getState())) {
+			record.setState("0");
+			record.setUser(record.getCurrentUser());
 		}
-		reagentService.save(reagent);
-		addMessage(redirectAttributes, "保存化学试剂成功");
+		reagentRecordService.save(record);
+		addMessage(redirectAttributes, "保存记录成功");
 		return "redirect:"+Global.getAdminPath()+"/work/reagent/?repage";
 	}
 	
 	@RequiresPermissions("work:reagent:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Reagent reagent, RedirectAttributes redirectAttributes) {
-		reagentService.delete(reagent);
-		addMessage(redirectAttributes, "删除化学试剂成功");
+	public String delete(ReagentRecord record, RedirectAttributes redirectAttributes) {
+		reagentRecordService.delete(record);
+		addMessage(redirectAttributes, "删除记录成功");
 		return "redirect:"+Global.getAdminPath()+"/work/reagent/?repage";
 	}
 	
-	@RequestMapping(value = "counter")
-	public String counter(Model model) {
-		return "modules/work/counter";
-	}
 	
 	@RequiresPermissions("work:reagent:use")
 	@RequestMapping(value = "toUse")
@@ -108,29 +109,16 @@ public class ReagentController extends BaseController {
 			reagentRecord.setState("0");
 		}
 		reagentRecord.setUser(reagentRecord.getCurrentUser());
-		reagentService.saveRecord(reagentRecord);
+		reagentRecordService.save(reagentRecord);
 		addMessage(redirectAttributes, "添加记录成功");
 		return "redirect:"+Global.getAdminPath()+"/work/reagent/?repage";
-	}
-	
-	public ReagentRecord getRecord(ReagentRecord reagentRecord) {
-		ReagentRecord entity = null;
-		String id = reagentRecord.getId();
-		if (StringUtils.isNotBlank(id)){
-			entity = reagentService.getRecord(reagentRecord);
-		}
-		if (entity == null){
-			entity = new ReagentRecord();
-		}
-		return entity;
 	}
 	
 	@RequiresPermissions("work:reagent:audit")
 	@RequestMapping(value = "auditList")
 	public String auditList(ReagentRecord reagentRecord, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<ReagentRecord> page = reagentService.findAuditPage(new Page<ReagentRecord>(request, response), reagentRecord);
+		Page<ReagentRecord> page = reagentRecordService.findAuditPage(new Page<ReagentRecord>(request, response), reagentRecord);
 		model.addAttribute("page", page);
-		model.addAttribute("reagentRecord", getRecord(reagentRecord));
 		return "modules/work/reagentRecordAuditList";
 	}
 	

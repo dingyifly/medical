@@ -115,15 +115,31 @@
 								<th class="hide"></th>
 								<th>时间</th>
 								<th>使用标识</th>
+								<th>用量</th>
 								<th>申请人</th>
+								<th>所属部门</th>
 								<th>使用项目</th>
 								<th>说明</th>
 								<th>审核状态</th>
-								<th>备注信息</th>
 								<shiro:hasPermission name="work:reagent:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 							</tr>
 						</thead>
 						<tbody id="reagentRecordList">
+							<c:forEach items="${reagent.reagentRecordList}" var="rr" varStatus="g">
+								<tr>
+									<td class="hide">
+										<input id="recordId" type="hidden" value="${rr.id}">
+									</td>
+									<td><fmt:formatDate value="${rr.useDate}" pattern="yyyy-MM-dd"/></td>
+									<td>${fns:getDictLabel(rr.useFlag, 'use_flag', '')}</td>
+									<td>${rr.num}</td>
+									<td>${rr.user.name}</td>
+									<td>${rr.user.office.name}</td>
+									<td>${rr.project}</td>
+									<td>${rr.instructions}</td>
+									<td>${fns:getDictLabel(rr.state, 'use_audit_flag', '')}</td>
+								</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 					<script type="text/template" id="reagentRecordTpl">//<!--
@@ -162,7 +178,7 @@
 							</td></shiro:hasPermission>
 						</tr>//-->
 					</script>
-					<script type="text/javascript">
+					<!-- <script type="text/javascript">
 						var reagentRecordRowIdx = 0, reagentRecordTpl = $("#reagentRecordTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 						$(document).ready(function() {
 							var data = ${fns:toJson(reagent.reagentRecordList)};
@@ -171,7 +187,7 @@
 								reagentRecordRowIdx = reagentRecordRowIdx + 1;
 							}
 						});
-					</script>
+					</script> -->
 				</div>
 			</div>
 		<div class="form-actions">

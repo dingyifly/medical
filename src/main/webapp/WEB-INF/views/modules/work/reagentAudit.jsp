@@ -72,7 +72,7 @@
 		<li><a href="${ctx}/work/reagent/">化学试剂列表</a></li>
 		<li class="active"><a href="javascript:void(0)">化学试剂使用</a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="reagentRecord" action="${ctx}/work/reagentRecord/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="reagentRecord" action="${ctx}/work/reagent/addRecord" method="post" class="form-horizontal">
 		<form:hidden path="reagent.id"/>
 		<%-- <form:hidden path="id"/> --%>
 		<sys:message content="${message}"/>		

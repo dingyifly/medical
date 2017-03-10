@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.medical.common.persistence.Page;
 import com.medical.common.service.CrudService;
 import com.medical.common.utils.StringUtils;
+import com.medical.modules.sys.utils.UserUtils;
 import com.medical.modules.work.entity.Reagent;
 import com.medical.modules.work.dao.ReagentDao;
 import com.medical.modules.work.entity.ReagentRecord;
@@ -65,6 +66,13 @@ public class ReagentService extends CrudService<ReagentDao, Reagent> {
 		}
 	}
 	
+	
+	@Transactional(readOnly = false)
+	public void delete(Reagent reagent) {
+		super.delete(reagent);
+		reagentRecordDao.delete(new ReagentRecord(reagent));
+	}
+	
 	@Transactional(readOnly = false)
 	public void saveRecord(ReagentRecord record) {
 		if (StringUtils.isBlank(record.getId())){
@@ -76,10 +84,18 @@ public class ReagentService extends CrudService<ReagentDao, Reagent> {
 		}
 	}
 	
-	@Transactional(readOnly = false)
-	public void delete(Reagent reagent) {
-		super.delete(reagent);
-		reagentRecordDao.delete(new ReagentRecord(reagent));
+	public ReagentRecord getRecord(ReagentRecord record) {
+		return reagentRecordDao.get(record);
+	}
+	
+	public Page<ReagentRecord> findAuditPage(Page<ReagentRecord> page, ReagentRecord record) {
+		String flag = null;
+		if (!UserUtils.hasRole(record.getCurrentUser(), "manager") 
+				&& !record.getCurrentUser().isAdmin()) {
+			flag = "1";
+		}
+		page.setList(reagentRecordDao.findAuditList(record, flag));
+		return page;
 	}
 	
 }

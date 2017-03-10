@@ -20,6 +20,7 @@ public class ReagentRecord extends DataEntity<ReagentRecord> {
 	private static final long serialVersionUID = 1L;
 	private Date useDate;		// 时间
 	private String useFlag;		// 使用标识
+	private String num;			//使用数量
 	private User user;		// 申请人
 	private String project;		// 使用项目
 	private String instructions;		// 说明
@@ -38,7 +39,7 @@ public class ReagentRecord extends DataEntity<ReagentRecord> {
 		this.reagent = reagent;
 	}
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getUseDate() {
 		return useDate;
 	}
@@ -56,6 +57,14 @@ public class ReagentRecord extends DataEntity<ReagentRecord> {
 		this.useFlag = useFlag;
 	}
 	
+	public String getNum() {
+		return num;
+	}
+
+	public void setNum(String num) {
+		this.num = num;
+	}
+
 	public User getUser() {
 		return user;
 	}

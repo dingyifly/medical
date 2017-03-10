@@ -3,6 +3,10 @@
  */
 package com.medical.modules.work.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.medical.common.persistence.CrudDao;
 import com.medical.common.persistence.annotation.MyBatisDao;
 import com.medical.modules.work.entity.ReagentRecord;
@@ -14,5 +18,15 @@ import com.medical.modules.work.entity.ReagentRecord;
  */
 @MyBatisDao
 public interface ReagentRecordDao extends CrudDao<ReagentRecord> {
+
+	/**
+	 * 查询审核列表
+	 * @param record
+	 * @param flag 如果为“1”表示部门主管，其他为管理员或
+	 * @return
+	 */
+	List<ReagentRecord> findAuditList(@Param("record")ReagentRecord record, @Param("flag")String flag);
+	
+	int findAuditCount(ReagentRecord record, @Param("flag")String flag);
 	
 }
