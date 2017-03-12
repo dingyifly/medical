@@ -48,8 +48,14 @@
 			<if test="useFlag != null and useFlag != ''">
 				AND a.use_flag = #{useFlag}
 			</if>
-			<if test="reagent != null and reagent != ''">
-				AND a.reagent_id = #{reagent.id}
+			<if test="reagent != null and reagent.name != ''">
+				AND b.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{reagent.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{reagent.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{reagent.name},'%')</if>
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{currentUser.id}
 			</if>
 		</where>
 		<choose>
@@ -157,7 +163,37 @@
 			<if test="record.reagent != null and record.reagent != ''">
 				AND a.reagent_id = #{record.reagent.id}
 			</if>
-			<if test="flag == '1'">
+			<if test="flag == '1'.toString()">
+				AND state = '0'
+				AND u4.office_id = #{record.currentUser.office.id}	
+			</if>
+			<if test="flag == null || flag == ''">
+				AND state = '1'
+			</if>
+		</where>
+		<choose>
+			<when test="record.page !=null and record.page.orderBy != null and record.page.orderBy != ''">
+				ORDER BY ${record.page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAuditCount" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM work_reagent_record a
+		<include refid="reagentRecordJoins"/>
+		<where>
+			a.del_flag = #{record.DEL_FLAG_NORMAL}
+			<if test="record.useFlag != null and record.useFlag != ''">
+				AND a.use_flag = #{record.useFlag}
+			</if>
+			<if test="record.reagent != null and record.reagent != ''">
+				AND a.reagent_id = #{record.reagent.id}
+			</if>
+			<if test="flag == '1'.toString()">
 				AND state = '0'
 				AND u4.office_id = #{record.currentUser.office.id}	
 			</if>

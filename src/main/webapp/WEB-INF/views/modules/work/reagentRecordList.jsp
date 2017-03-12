@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>化学试剂记录审核</title>
+	<title>化学试剂记录列表</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -18,9 +18,9 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/reagentRecord/auditList">化学试剂记录审核列表</a></li>
+		<li class="active"><a href="${ctx}/work/reagentRecord/auditList">化学试剂记录列表</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="reagentRecord" action="${ctx}/work/reagentRecord/auditList" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="reagentRecord" action="${ctx}/work/reagentRecord/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -78,7 +78,7 @@
 					${fns:getDictLabel(record.state, 'use_audit_flag', '')}
 				</td>
 				<td>
-					<a href="${ctx}/work/reagent/view?id=${record.id}">查看</a>
+					<a href="${ctx}/work/reagentRecord/view?id=${record.id}">查看</a>
 					<%-- <shiro:hasAnyPermissions name="work:reagent:use,work:reagent:edit">
 						<a href="${ctx}/work/reagent/toUse?id=${reagent.id}">使用</a>
 						<shiro:hasPermission name="work:reagent:edit">
@@ -86,9 +86,6 @@
 						<a href="${ctx}/work/reagent/delete?id=${reagent.id}" onclick="return confirmx('确认要删除该化学试剂吗？', this.href)">删除</a>
 					</shiro:hasPermission>
 					</shiro:hasAnyPermissions> --%>
-					<shiro:hasPermission name="work:reagent:audit">
-						<a href="${ctx}/work/reagentRecord/toAudit?id=${record.id}">审核</a>
-					</shiro:hasPermission>
 				</td>
 			</tr>
 		</c:forEach>

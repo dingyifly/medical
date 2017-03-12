@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.WorkCheckItemDao">
+    
+	<sql id="workCheckItemColumns">
+		a.id AS "id",
+		a.check_id AS "check.id",
+		a.dict_id AS "dictId",
+		a.num AS "num",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="workCheckItemJoins">
+		LEFT JOIN work_check b ON b.id = a.check_id
+	</sql>
+    
+	<select id="get" resultType="WorkCheckItem">
+		SELECT 
+			<include refid="workCheckItemColumns"/>
+		FROM work_check_item a
+		<include refid="workCheckItemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WorkCheckItem">
+		SELECT 
+			<include refid="workCheckItemColumns"/>
+		FROM work_check_item a
+		<include refid="workCheckItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="check != null and check.id != null and check.id != ''">
+				AND a.check_id = #{check.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WorkCheckItem">
+		SELECT 
+			<include refid="workCheckItemColumns"/>
+		FROM work_check_item a
+		<include refid="workCheckItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_check_item(
+			id,
+			check_id,
+			dict_id,
+			num,
+			del_flag
+		) VALUES (
+			#{id},
+			#{check.id},
+			#{dictId},
+			#{num},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_check_item SET 	
+			check_id = #{check.id},
+			dict_id = #{dictId},
+			num = #{num}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_check_item SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE check_id = #{check.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

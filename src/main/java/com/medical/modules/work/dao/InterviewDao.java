@@ -14,5 +14,12 @@ import com.medical.modules.work.entity.Interview;
  */
 @MyBatisDao
 public interface InterviewDao extends CrudDao<Interview> {
+
+	/**
+	 * 获取待面试条数
+	 * @param interview
+	 * @return
+	 */
+	int getToDoCount(Interview interview);
 	
 }

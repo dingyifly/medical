@@ -6,6 +6,7 @@ package com.medical.modules.work.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,7 +66,7 @@ public class InterviewController extends BaseController {
 		return "modules/work/interviewForm";
 	}
 
-	@RequiresPermissions("work:interview:edit")
+	@RequiresPermissions(value={"work:interview:edit", "work:interview:handle"}, logical=Logical.OR)
 	@RequestMapping(value = "save")
 	public String save(Interview interview, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, interview)){
@@ -82,6 +83,17 @@ public class InterviewController extends BaseController {
 		interviewService.delete(interview);
 		addMessage(redirectAttributes, "删除面试成功");
 		return "redirect:"+Global.getAdminPath()+"/work/interview/?repage";
+	}
+	
+	@RequiresPermissions("work:interview:view")
+	@RequestMapping(value = {"todoList"})
+	public String todoList(Interview interview, HttpServletRequest request, HttpServletResponse response, Model model) {
+		if (!UserUtils.hasRole(interview.getCurrentUser(), "personnel") && !interview.getCurrentUser().isAdmin()) {
+			interview.setOffice(interview.getCurrentUser().getOffice());
+		}
+		Page<Interview> page = interviewService.findPage(new Page<Interview>(request, response), interview); 
+		model.addAttribute("page", page);
+		return "modules/work/interviewTodoList";
 	}
 
 }

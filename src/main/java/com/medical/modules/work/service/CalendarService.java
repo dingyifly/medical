@@ -44,4 +44,8 @@ public class CalendarService extends CrudService<CalendarDao, Calendar> {
 		super.delete(calendar);
 	}
 	
+	public int todoCount(Calendar calendar) {
+		return  dao.todoCount(calendar);
+	}
+	
 }

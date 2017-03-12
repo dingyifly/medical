@@ -5,21 +5,14 @@ package com.medical.modules.work.dao;
 
 import com.medical.common.persistence.CrudDao;
 import com.medical.common.persistence.annotation.MyBatisDao;
-import com.medical.modules.work.entity.Calendar;
+import com.medical.modules.work.entity.WorkCheckItem;
 
 /**
- * 日程管理DAO接口
+ * 检测申请DAO接口
  * @author dyf
- * @version 2017-02-22
+ * @version 2017-03-11
  */
 @MyBatisDao
-public interface CalendarDao extends CrudDao<Calendar> {
-
-	/**
-	 * 
-	 * @param calendar
-	 * @return
-	 */
-	int todoCount(Calendar calendar);
+public interface WorkCheckItemDao extends CrudDao<WorkCheckItem> {
 	
 }

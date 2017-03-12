@@ -33,13 +33,13 @@
 	<form:form id="inputForm" modelAttribute="calendar" action="${ctx}/work/calendar/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">执行人：</label>
 			<div class="controls">
 				<sys:treeselect id="user" name="user.id" value="${calendar.user.id}" labelName="user.name" labelValue="${calendar.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
-		</div>
+		</div> --%>
 		<div class="control-group">
 			<label class="control-label">日程说明：</label>
 			<div class="controls">
@@ -62,14 +62,14 @@
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
-		</div>
+		</div> --%>
 		<div class="form-actions">
-			<shiro:hasPermission name="work:calendar:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasAnyPermissions name="work:calendar:edit,work:calendar:add"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasAnyPermissions>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

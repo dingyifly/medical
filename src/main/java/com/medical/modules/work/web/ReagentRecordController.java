@@ -6,6 +6,7 @@ package com.medical.modules.work.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class ReagentRecordController extends BaseController {
 		return entity;
 	}
 	
-	@RequiresPermissions("work:reagent:use")
+	@RequiresPermissions(value = {"work:reagent:use", "work:reagent:view"}, logical=Logical.OR)
 	@RequestMapping(value = {"list", ""})
 	public String list(ReagentRecord record, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<ReagentRecord> page = reagentRecordService.findPage(new Page<ReagentRecord>(request, response), record); 
@@ -67,7 +68,7 @@ public class ReagentRecordController extends BaseController {
 	@RequestMapping(value = "view")
 	public String view(ReagentRecord record, Model model) {
 		model.addAttribute("reagentRecord", record);
-		return "modules/work/reagentInfo";
+		return "modules/work/reagentRecordInfo";
 	}
 
 	@RequiresPermissions("work:reagent:use")
@@ -120,6 +121,21 @@ public class ReagentRecordController extends BaseController {
 		Page<ReagentRecord> page = reagentRecordService.findAuditPage(new Page<ReagentRecord>(request, response), reagentRecord);
 		model.addAttribute("page", page);
 		return "modules/work/reagentRecordAuditList";
+	}
+	
+	@RequiresPermissions("work:reagent:use")
+	@RequestMapping(value = "toAudit")
+	public String toAudit(ReagentRecord reagentRecord, Model model) {
+		model.addAttribute("reagentRecord", reagentRecord);
+		return "modules/work/reagentAudit";
+	}
+	
+	@RequiresPermissions("work:workLeave:audit")
+	@RequestMapping(value = "audit")
+	public String audit(ReagentRecord reagentRecord, Model model, RedirectAttributes redirectAttributes) {
+		reagentRecordService.save(reagentRecord);
+		addMessage(redirectAttributes, "审核记录成功");
+		return "redirect:"+Global.getAdminPath()+"/work/reagentRecord/auditList?repage";
 	}
 	
 }

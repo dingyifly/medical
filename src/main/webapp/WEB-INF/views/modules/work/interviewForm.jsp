@@ -74,7 +74,7 @@
 			</div>
 		</div> --%>
 		<div class="form-actions">
-			<shiro:hasPermission name="work:interview:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasAnyPermissions name="work:interview:edit,work:interview:handle"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasAnyPermissions>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

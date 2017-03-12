@@ -67,9 +67,6 @@
 						<a href="${ctx}/work/reagent/delete?id=${reagent.id}" onclick="return confirmx('确认要删除该化学试剂吗？', this.href)">删除</a>
 					</shiro:hasPermission>
 					</shiro:hasAnyPermissions>
-					<shiro:hasPermission name="work:reagent:audit">
-						<a href="${ctx}/work/reagent/toAudit?id=${reagent.id}">审核</a>
-					</shiro:hasPermission>
 				</td>
 			</tr>
 		</c:forEach>

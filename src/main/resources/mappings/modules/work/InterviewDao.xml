@@ -130,4 +130,29 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="getToDoCount" resultType="java.lang.Integer">
+		SELECT 
+			count(*)
+		FROM work_interview a
+		<include refid="interviewJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			<if test="faceDate != null and faceDate != ''">
+				AND a.face_date = #{faceDate}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+		</where>
+	</select>
+	
 </mapper>

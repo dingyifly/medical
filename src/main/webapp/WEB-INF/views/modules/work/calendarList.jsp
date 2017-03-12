@@ -19,7 +19,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/work/calendar/">日程列表</a></li>
-		<shiro:hasPermission name="work:calendar:edit"><li><a href="${ctx}/work/calendar/form">日程添加</a></li></shiro:hasPermission>
+		<shiro:hasAnyPermissions name="work:calendar:edit,work:calendar:add"><li><a href="${ctx}/work/calendar/form">日程添加</a></li></shiro:hasAnyPermissions>
 	</ul>
 	<form:form id="searchForm" modelAttribute="calendar" action="${ctx}/work/calendar/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -38,7 +38,7 @@
 				<th>开始时间</th>
 				<th>结束时间</th>
 				<th>更新时间</th>
-				<th>备注信息</th>
+				<!-- <th>备注信息</th> -->
 				<shiro:hasPermission name="work:calendar:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -60,9 +60,9 @@
 				<td>
 					<fmt:formatDate value="${calendar.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
-				<td>
+				<%-- <td>
 					${calendar.remarks}
-				</td>
+				</td> --%>
 				<shiro:hasPermission name="work:calendar:edit"><td>
     				<a href="${ctx}/work/calendar/form?id=${calendar.id}">修改</a>
 					<a href="${ctx}/work/calendar/delete?id=${calendar.id}" onclick="return confirmx('确认要删除该日程吗？', this.href)">删除</a>

@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.medical.modules.work.dao.CalendarDao">
+<mapper namespace="com.medical.modules.work.dao.WorkCheckDao">
     
-	<sql id="calendarColumns">
+	<sql id="workCheckColumns">
 		a.id AS "id",
-		a.user_id AS "user.id",
-		a.description AS "description",
-		a.start_time AS "startTime",
-		a.end_time AS "endTime",
+		a.apply_no AS "applyNo",
+		a.applyer AS "applyer.id",
+		a.state AS "state",
+		a.analyser AS "analyser.id",
+		a.report AS "report",
+		a.report_files AS "reportFiles",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u2.name AS "user.name"
+		u4.name AS "applyer.name",
+		u5.name AS "analyser.name",
+		u4.office_id AS "applyer.office.id"
 	</sql>
 	
-	<sql id="calendarJoins">
-		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	<sql id="workCheckJoins">
+		LEFT JOIN sys_user u4 on u4.id = a.applyer
+		LEFT JOIN sys_user u5 ON u5.id = a.analyser
 	</sql>
     
-	<select id="get" resultType="Calendar">
+	<select id="get" resultType="WorkCheck">
 		SELECT 
-			<include refid="calendarColumns"/>
-		FROM work_calendar a
-		<include refid="calendarJoins"/>
+			<include refid="workCheckColumns"/>
+		FROM work_check a
+		<include refid="workCheckJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="Calendar">
+	<select id="findList" resultType="WorkCheck">
 		SELECT 
-			<include refid="calendarColumns"/>
-		FROM work_calendar a
-		<include refid="calendarJoins"/>
+			<include refid="workCheckColumns"/>
+		FROM work_check a
+		<include refid="workCheckJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -47,11 +55,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="Calendar">
+	<select id="findAllList" resultType="WorkCheck">
 		SELECT 
-			<include refid="calendarColumns"/>
-		FROM work_calendar a
-		<include refid="calendarJoins"/>
+			<include refid="workCheckColumns"/>
+		FROM work_check a
+		<include refid="workCheckJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
@@ -66,12 +74,14 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO work_calendar(
+		INSERT INTO work_check(
 			id,
-			user_id,
-			description,
-			start_time,
-			end_time,
+			apply_no,
+			applyer,
+			state,
+			analyser,
+			report,
+			report_files,
 			create_by,
 			create_date,
 			update_by,
@@ -80,10 +90,12 @@
 			del_flag
 		) VALUES (
 			#{id},
-			#{user.id},
-			#{description},
-			#{startTime},
-			#{endTime},
+			#{applyNo},
+			#{applyer.id},
+			#{state},
+			#{analyser.id},
+			#{report},
+			#{reportFiles},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -94,11 +106,12 @@
 	</insert>
 	
 	<update id="update">
-		UPDATE work_calendar SET 	
-			user_id = #{user.id},
-			description = #{description},
-			start_time = #{startTime},
-			end_time = #{endTime},
+		UPDATE work_check SET 	
+			apply_no = #{applyNo},
+			state = #{state},
+			analyser = #{analyser.id},
+			report = #{report},
+			report_files = #{reportFiles},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
@@ -106,20 +119,9 @@
 	</update>
 	
 	<update id="delete">
-		UPDATE work_calendar SET 
+		UPDATE work_check SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	<select id="todoCount" resultType="java.lang.Integer">
-		SELECT 
-			count(*)
-		FROM work_calendar a
-		<include refid="calendarJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			and curdate() between start_time and end_time
-		</where>
-	</select>
 	
 </mapper>

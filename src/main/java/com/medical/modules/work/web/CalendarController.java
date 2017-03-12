@@ -6,6 +6,7 @@ package com.medical.modules.work.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,11 +62,14 @@ public class CalendarController extends BaseController {
 		return "modules/work/calendarForm";
 	}
 
-	@RequiresPermissions("work:calendar:edit")
+	@RequiresPermissions(value={"work:calendar:edit", "work:calendar:add"}, logical=Logical.OR)
 	@RequestMapping(value = "save")
 	public String save(Calendar calendar, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, calendar)){
 			return form(calendar, model);
+		}
+		if(calendar.getUser() == null) {
+			calendar.setUser(calendar.getCurrentUser());
 		}
 		calendarService.save(calendar);
 		addMessage(redirectAttributes, "保存日程成功");

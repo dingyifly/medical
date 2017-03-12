@@ -74,8 +74,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/work/reagent/">化学试剂列表</a></li>
-		<li class="active"><a href="javascript:void(0)">化学试剂使用</a></li>
+		<%-- <li><a href="${ctx}/work/reagent/">化学试剂列表</a></li> --%>
+		<li class="active"><a href="javascript:void(0)">化学试剂记录查看</a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="reagentRecord" action="${ctx}/work/reagentRecord/audit" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -132,13 +132,6 @@
 			</div>
 		</div>
 		<div class="form-actions">
-			<shiro:hasRole name="dmanager">
-				<input id="pass" class="btn btn-primary" type="button" value="通过" onclick="subit('1')"/>&nbsp;
-			</shiro:hasRole>
-			<shiro:hasAnyRoles name="manager,boss,hr">
-				<input id="pass" class="btn btn-primary" type="button" value="通过" onclick="subit('2')"/>&nbsp;
-			</shiro:hasAnyRoles>
-			<%-- <input id="back" class="btn btn-primary" type="button" value="退回" onclick="subit('3')"/>&nbsp; --%>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

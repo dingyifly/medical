@@ -13,6 +13,7 @@ import com.medical.common.persistence.Page;
 import com.medical.common.service.CrudService;
 import com.medical.common.utils.StringUtils;
 import com.medical.modules.sys.utils.UserUtils;
+import com.medical.modules.work.dao.ReagentDao;
 import com.medical.modules.work.dao.ReagentRecordDao;
 import com.medical.modules.work.entity.Reagent;
 import com.medical.modules.work.entity.ReagentRecord;
@@ -26,6 +27,8 @@ import com.medical.modules.work.entity.ReagentRecord;
 @Transactional(readOnly = true)
 public class ReagentRecordService extends CrudService<ReagentRecordDao, ReagentRecord> {
 
+	@Autowired
+	private ReagentDao reagentDao;
 	
 	public ReagentRecord get(String id) {
 		ReagentRecord record = super.get(id);
@@ -37,6 +40,9 @@ public class ReagentRecordService extends CrudService<ReagentRecordDao, ReagentR
 	}
 	
 	public Page<ReagentRecord> findPage(Page<ReagentRecord> page, ReagentRecord record) {
+		if(!record.getCurrentUser().isAdmin()) {
+			record.setUser(record.getCurrentUser());
+		}
 		return super.findPage(page, record);
 	}
 	
@@ -53,6 +59,13 @@ public class ReagentRecordService extends CrudService<ReagentRecordDao, ReagentR
 		}else{
 			record.preUpdate();
 			dao.update(record);
+			if ("2".equals(record.getState())) {
+				Reagent reagent = reagentDao.get(record.getReagent());
+				String num = reagent.getRepertory();
+				num = String.valueOf(Integer.parseInt(num) + ("0".equals(record.getUseFlag()) ? -1 * Integer.parseInt(record.getNum()) : Integer.parseInt(record.getNum())));
+				reagent.setRepertory(num);
+				reagentDao.update(reagent);
+			}
 		}
 	}
 	

@@ -257,8 +257,16 @@
 	<script src="${ctxStatic}/common/wsize.min.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
+		var todoWin;
+		var timer;
 		$(function(){
-			layer.open({
+			backlog();
+		});
+		function backlog() {
+			if (!todoWin && todoWin != null) {
+				layer.close(todoWin);
+			}
+			todoWin = layer.open({
 				type: 2,
 				title: '待办事项(测试中)',
 				closeBtn: 1, //不显示关闭按钮
@@ -268,9 +276,13 @@
 				offset: 'rb', //右下角弹出
 				time: 10000, //2秒后自动关闭
 				anim: 2,
-				content: ['http://www.baidu.com', 'yes'] //iframe的url， no代表不显示滚动条
+				content: ['${ctx}/sys/backlog/', 'yes'] //iframe的url， no代表不显示滚动条
 			});
-		});
+			if (timer) {
+				window.clearTimeout(timer);
+			}
+			timer = window.setTimeout("backlog()",600000);
+		}
 	</script>
 </body>
 </html>

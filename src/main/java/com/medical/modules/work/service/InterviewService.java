@@ -44,4 +44,8 @@ public class InterviewService extends CrudService<InterviewDao, Interview> {
 		super.delete(interview);
 	}
 	
+	public int getToDoCount(Interview interview) {
+		return dao.getToDoCount(interview);
+	}
+	
 }
