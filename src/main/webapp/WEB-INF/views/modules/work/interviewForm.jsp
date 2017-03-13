@@ -43,7 +43,7 @@
 			<label class="control-label">面试部门：</label>
 			<div class="controls">
 				<sys:treeselect id="office" name="office.id" value="${interview.office.id}" labelName="office.name" labelValue="${interview.office.name}"
-					title="部门" url="/sys/office/treeData?type=2" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+					title="部门" url="/sys/office/treeData?type=2&isAll=true" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">

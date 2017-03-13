@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.CalculatorItemDao">
+    
+	<sql id="calculatorItemColumns">
+		a.id AS "id",
+		a.project_id AS "project.id",
+		a.name AS "name",
+		a.num AS "num",
+		a.del_flag AS "delFlag",
+		b.name AS "project.name"
+	</sql>
+	
+	<sql id="calculatorItemJoins">
+		LEFT JOIN work_calculator b ON b.id = a.project_id
+	</sql>
+    
+	<select id="get" resultType="CalculatorItem">
+		SELECT 
+			<include refid="calculatorItemColumns"/>
+		FROM work_calculator_item a
+		<include refid="calculatorItemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CalculatorItem">
+		SELECT 
+			<include refid="calculatorItemColumns"/>
+		FROM work_calculator_item a
+		<include refid="calculatorItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="project != null and project.id != null and project.id != ''">
+				AND a.project_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{project.id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{project.id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{project.id},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				order by name
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CalculatorItem">
+		SELECT 
+			<include refid="calculatorItemColumns"/>
+		FROM work_calculator_item a
+		<include refid="calculatorItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_calculator_item(
+			id,
+			project_id,
+			name,
+			num,
+			del_flag
+		) VALUES (
+			#{id},
+			#{project.id},
+			#{name},
+			#{num},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_calculator_item SET 	
+			project_id = #{project.id},
+			name = #{name},
+			num = #{num}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_calculator_item SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE project_id = #{project.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

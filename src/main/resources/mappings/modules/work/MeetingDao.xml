@@ -135,4 +135,16 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="todoCount" resultType="java.lang.Integer">
+		SELECT 
+			count(*)
+		FROM work_meeting a
+		<include refid="meetingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and ','||#{currentUser.user.id}||',' like ','||participant||','
+			<![CDATA[ and CURDATE() <= meeting_time ]]> 
+		</where>
+	</select>
+	
 </mapper>

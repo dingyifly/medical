@@ -88,11 +88,6 @@ public class ReagentController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/work/reagent/?repage";
 	}
 	
-	@RequestMapping(value = "counter")
-	public String counter(Model model) {
-		return "modules/work/counter";
-	}
-	
 	@RequiresPermissions("work:reagent:use")
 	@RequestMapping(value = "toUse")
 	public String toUse(Reagent reagent, ReagentRecord reagentRecord, Model model) {
