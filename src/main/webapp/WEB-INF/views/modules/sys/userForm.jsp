@@ -180,7 +180,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">备注:</label>
+			<label class="control-label">简介:</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>
 			</div>

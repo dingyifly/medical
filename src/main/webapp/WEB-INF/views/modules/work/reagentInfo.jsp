@@ -71,33 +71,34 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">库存：</label>
+			<label class="control-label">CAS：</label>
 			<div class="controls">
-				<form:input readonly="true" path="repertory" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+				<form:input readonly="true" path="model" htmlEscape="false" maxlength="50" class="input-xlarge required"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">型号：</label>
+			<label class="control-label">规格：</label>
 			<div class="controls">
-				<form:input readonly="true" path="model" htmlEscape="false" maxlength="50" class="input-xlarge "/>
+				<p class="form-control-static">${fns:getDictLabel(reagent.specification, 'reagent_specification', '')}</p>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">库存：</label>
+			<div class="controls">
+				<form:input readonly="true" path="repertory" htmlEscape="false" maxlength="10" class="input-small required"/>
+				<span class="help-inline">${reagent.unit} </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">MSDS：</label>
+			<div class="controls">
+				<form:textarea readonly="true" path="instructions" htmlEscape="false" rows="4" class="input-xxlarge required"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">描述：</label>
 			<div class="controls">
 				<form:textarea readonly="true" path="descr" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">使用说明：</label>
-			<div class="controls">
-				<form:textarea readonly="true" path="instructions" htmlEscape="false" rows="4" class="input-xxlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">注意事项：</label>
-			<div class="controls">
-				<form:textarea readonly="true" path="matters" htmlEscape="false" rows="4" class="input-xxlarge "/>
 			</div>
 		</div>
 		<%-- <div class="control-group">

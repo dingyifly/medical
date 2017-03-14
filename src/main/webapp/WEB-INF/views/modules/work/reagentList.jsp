@@ -37,8 +37,9 @@
 		<thead>
 			<tr>
 				<th>化学名称</th>
+				<th>CAS</th>
 				<th>库存</th>
-				<th>型号</th>
+				<th>规格</th>
 				<th>描述</th>
 				<th>操作</th>
 			</tr>
@@ -49,11 +50,12 @@
 				<td>
 					${reagent.name}
 				</td>
+				<td>${reagent.model}</td>
 				<td>
-					${reagent.repertory}
+					${reagent.repertory}${reagent.unit}
 				</td>
 				<td>
-					${reagent.model}
+					${fns:getDictLabel(reagent.specification, 'reagent_specification', '')}
 				</td>
 				<td>
 					${reagent.descr}

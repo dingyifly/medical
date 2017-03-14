@@ -16,8 +16,10 @@ import com.medical.modules.sys.entity.Backlog;
 import com.medical.modules.sys.utils.UserUtils;
 import com.medical.modules.work.entity.Calendar;
 import com.medical.modules.work.entity.Interview;
+import com.medical.modules.work.entity.Meeting;
 import com.medical.modules.work.service.CalendarService;
 import com.medical.modules.work.service.InterviewService;
+import com.medical.modules.work.service.MeetingService;
 
 
 /**
@@ -33,12 +35,15 @@ public class BacklogController extends BaseController {
 	InterviewService interviewService;
 	@Autowired
 	CalendarService calendarService;
+	@Autowired
+	MeetingService meetingService;
 	
 	@RequestMapping(value = {"backlog", ""})
 	public String backlog(HttpServletRequest request, HttpServletResponse response, Model model) {
 		List<Backlog> list = Lists.newArrayList();
 		interviewCount(list);
 		calendarCount(list);
+		meetingCount(list);
 		model.addAttribute("backlogList", list);
 		return "modules/sys/backlogList";
 	}
@@ -68,6 +73,18 @@ public class BacklogController extends BaseController {
 		int num = calendarService.todoCount(new Calendar());
 		if (num != 0) {
 			Backlog l = new Backlog(num, "待办日程", "work/calendar/");
+			list.add(l);
+		}
+	}
+	
+	/**
+	 * 待办会议
+	 * @param list
+	 */
+	private void meetingCount(List<Backlog> list) {
+		int num = meetingService.todoCount(new Meeting());
+		if (num != 0) {
+			Backlog l = new Backlog(num, "待办会议", "work/meeting/");
 			list.add(l);
 		}
 	}

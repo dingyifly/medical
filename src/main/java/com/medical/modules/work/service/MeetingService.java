@@ -64,4 +64,8 @@ public class MeetingService extends CrudService<MeetingDao, Meeting> {
 		super.delete(meeting);
 	}
 	
+	public int todoCount(Meeting meeting) {
+		return dao.todoCount(meeting);
+	}
+	
 }

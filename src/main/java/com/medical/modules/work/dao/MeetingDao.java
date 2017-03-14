@@ -14,5 +14,12 @@ import com.medical.modules.work.entity.Meeting;
  */
 @MyBatisDao
 public interface MeetingDao extends CrudDao<Meeting> {
+
+	/**
+	 * 待办条数
+	 * @param meeting
+	 * @return
+	 */
+	int todoCount(Meeting meeting);
 	
 }

@@ -142,7 +142,7 @@
 		<include refid="meetingJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			and ','||#{currentUser.user.id}||',' like ','||participant||','
+			and ','||#{currentUser.id}||',' like ','||participant||','
 			<![CDATA[ and CURDATE() <= meeting_time ]]> 
 		</where>
 	</select>

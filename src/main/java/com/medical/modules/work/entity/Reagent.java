@@ -19,10 +19,14 @@ public class Reagent extends DataEntity<Reagent> {
 	private static final long serialVersionUID = 1L;
 	private String name;		// 化学名称
 	private String repertory;		// 库存
-	private String model;		// 型号
+	private String model;		// 型号（CAS号）
 	private String descr;		// 描述
-	private String instructions;		// 使用说明
+	private String instructions;		// 使用说明(使用说明和注意事项合并为MSDS)
 	private String matters;		// 注意事项
+	
+	private String specification;//规格
+	private String unit;//单位
+	
 	private List<ReagentRecord> reagentRecordList = Lists.newArrayList();		// 子表列表
 	
 	public Reagent() {
@@ -85,6 +89,22 @@ public class Reagent extends DataEntity<Reagent> {
 		this.matters = matters;
 	}
 	
+	public String getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(String specification) {
+		this.specification = specification;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
 	public List<ReagentRecord> getReagentRecordList() {
 		return reagentRecordList;
 	}
