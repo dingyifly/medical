@@ -27,6 +27,12 @@ public interface ReagentRecordDao extends CrudDao<ReagentRecord> {
 	 */
 	List<ReagentRecord> findAuditList(@Param("record")ReagentRecord record, @Param("flag")String flag);
 	
-	int findAuditCount(ReagentRecord record, @Param("flag")String flag);
+	/**
+	 *	查询审核条数
+	 * @param record
+	 * @param flag 如果为“1”表示部门主管，其他为管理员或
+	 * @return
+	 */
+	int todoCount(@Param("record")ReagentRecord record, @Param("flag")String flag);
 	
 }

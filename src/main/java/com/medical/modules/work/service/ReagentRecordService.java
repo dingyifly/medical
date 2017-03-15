@@ -72,12 +72,21 @@ public class ReagentRecordService extends CrudService<ReagentRecordDao, ReagentR
 	
 	public Page<ReagentRecord> findAuditPage(Page<ReagentRecord> page, ReagentRecord record) {
 		String flag = null;
-		if (!UserUtils.hasRole(record.getCurrentUser(), "manager") 
+		if (!UserUtils.hasRole(record.getCurrentUser(), "reagent-manager") 
 				&& !record.getCurrentUser().isAdmin()) {
 			flag = "1";
 		}
 		page.setList(dao.findAuditList(record, flag));
 		return page;
+	}
+	
+	public int todoCount(ReagentRecord record) {
+		String flag = null;
+		if (!UserUtils.hasRole(record.getCurrentUser(), "reagent-manager") 
+				&& !record.getCurrentUser().isAdmin()) {
+			flag = "1";
+		}
+		return dao.todoCount(record, flag);
 	}
 	
 }

@@ -181,7 +181,7 @@
 		</choose>
 	</select>
 	
-	<select id="findAuditCount" resultType="java.lang.Integer">
+	<select id="todoCount" resultType="java.lang.Integer">
 		SELECT count(*)
 		FROM work_reagent_record a
 		<include refid="reagentRecordJoins"/>
@@ -201,14 +201,6 @@
 				AND state = '1'
 			</if>
 		</where>
-		<choose>
-			<when test="record.page !=null and record.page.orderBy != null and record.page.orderBy != ''">
-				ORDER BY ${record.page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.create_date ASC
-			</otherwise>
-		</choose>
 	</select>
 	
 </mapper>

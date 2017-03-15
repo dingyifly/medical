@@ -17,9 +17,11 @@ import com.medical.modules.sys.utils.UserUtils;
 import com.medical.modules.work.entity.Calendar;
 import com.medical.modules.work.entity.Interview;
 import com.medical.modules.work.entity.Meeting;
+import com.medical.modules.work.entity.ReagentRecord;
 import com.medical.modules.work.service.CalendarService;
 import com.medical.modules.work.service.InterviewService;
 import com.medical.modules.work.service.MeetingService;
+import com.medical.modules.work.service.ReagentRecordService;
 
 
 /**
@@ -37,6 +39,8 @@ public class BacklogController extends BaseController {
 	CalendarService calendarService;
 	@Autowired
 	MeetingService meetingService;
+	@Autowired
+	ReagentRecordService reagentRecordService;
 	
 	@RequestMapping(value = {"backlog", ""})
 	public String backlog(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -44,6 +48,7 @@ public class BacklogController extends BaseController {
 		interviewCount(list);
 		calendarCount(list);
 		meetingCount(list);
+		reagentCount(list);
 		model.addAttribute("backlogList", list);
 		return "modules/sys/backlogList";
 	}
@@ -85,6 +90,18 @@ public class BacklogController extends BaseController {
 		int num = meetingService.todoCount(new Meeting());
 		if (num != 0) {
 			Backlog l = new Backlog(num, "待办会议", "work/meeting/");
+			list.add(l);
+		}
+	}
+	
+	/**
+	 * 化学试剂审核
+	 * @param list
+	 */
+	private void reagentCount(List<Backlog> list) {
+		int num = reagentRecordService.todoCount(new ReagentRecord());
+		if (num != 0) {
+			Backlog l = new Backlog(num, "试剂使用审核", "work/meeting/");
 			list.add(l);
 		}
 	}
