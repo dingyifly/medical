@@ -23,7 +23,6 @@
 	
 	<sql id="meetingJoins">
 		LEFT JOIN sys_user u3 ON u3.id = a.compere
-		LEFT JOIN sys_user u5 ON u5.id = a.participant
 		LEFT JOIN sys_user u7 ON u7.id = a.recorder
 	</sql>
     
@@ -142,7 +141,7 @@
 		<include refid="meetingJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			and ','||#{currentUser.id}||',' like ','||participant||','
+			and instr(','||participant||',', ','||#{currentUser.id}||',') > 0
 			<![CDATA[ and CURDATE() <= meeting_time ]]> 
 		</where>
 	</select>

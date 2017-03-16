@@ -81,6 +81,7 @@
 	 label.error{background:none;width:270px;font-weight:normal;color:inherit;margin:0;}
 	 .error{background-color: #f2dede;}
 	 .validateCode{float:right;}
+	 #validateCode{height:7px;padding-left:10px;}
 </STYLE>
 	<!--[if lt IE 9]>
 <SCRIPT src=""></SCRIPT>

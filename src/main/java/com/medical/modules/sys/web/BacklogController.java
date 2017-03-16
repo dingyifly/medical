@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +19,12 @@ import com.medical.modules.work.entity.Calendar;
 import com.medical.modules.work.entity.Interview;
 import com.medical.modules.work.entity.Meeting;
 import com.medical.modules.work.entity.ReagentRecord;
+import com.medical.modules.work.entity.WorkLeave;
 import com.medical.modules.work.service.CalendarService;
 import com.medical.modules.work.service.InterviewService;
 import com.medical.modules.work.service.MeetingService;
 import com.medical.modules.work.service.ReagentRecordService;
+import com.medical.modules.work.service.WorkLeaveService;
 
 
 /**
@@ -41,14 +44,18 @@ public class BacklogController extends BaseController {
 	MeetingService meetingService;
 	@Autowired
 	ReagentRecordService reagentRecordService;
+	@Autowired
+	WorkLeaveService workLeaveService;
 	
 	@RequestMapping(value = {"backlog", ""})
 	public String backlog(HttpServletRequest request, HttpServletResponse response, Model model) {
 		List<Backlog> list = Lists.newArrayList();
+//		SecurityUtils.getSubject().isPermitted("");
 		interviewCount(list);
 		calendarCount(list);
 		meetingCount(list);
 		reagentCount(list);
+		leaveCount(list);
 		model.addAttribute("backlogList", list);
 		return "modules/sys/backlogList";
 	}
@@ -102,6 +109,18 @@ public class BacklogController extends BaseController {
 		int num = reagentRecordService.todoCount(new ReagentRecord());
 		if (num != 0) {
 			Backlog l = new Backlog(num, "试剂使用审核", "work/meeting/");
+			list.add(l);
+		}
+	}
+	
+	/**
+	 * 请假待审核
+	 * @param list
+	 */
+	private void leaveCount(List<Backlog> list) {
+		int num = workLeaveService.todoCount(new WorkLeave());
+		if (num != 0) {
+			Backlog l = new Backlog(num, "请假审核", "work/workLeave/auditList");
 			list.add(l);
 		}
 	}
