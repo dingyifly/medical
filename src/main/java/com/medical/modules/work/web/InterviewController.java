@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.medical.common.config.Global;
 import com.medical.common.persistence.Page;
 import com.medical.common.web.BaseController;
+import com.medical.common.utils.CommonUtil;
 import com.medical.common.utils.StringUtils;
 import com.medical.modules.sys.utils.UserUtils;
 import com.medical.modules.work.entity.Interview;
@@ -51,7 +52,7 @@ public class InterviewController extends BaseController {
 	@RequiresPermissions("work:interview:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Interview interview, HttpServletRequest request, HttpServletResponse response, Model model) {
-		if (!UserUtils.hasRole(interview.getCurrentUser(), "personnel") && !interview.getCurrentUser().isAdmin()) {
+		if (!UserUtils.hasRole(interview.getCurrentUser(), "hr-manager") && !interview.getCurrentUser().isAdmin()) {
 			interview.setOffice(interview.getCurrentUser().getOffice());
 		}
 		Page<Interview> page = interviewService.findPage(new Page<Interview>(request, response), interview); 
@@ -71,6 +72,9 @@ public class InterviewController extends BaseController {
 	public String save(Interview interview, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, interview)){
 			return form(interview, model);
+		}
+		if (CommonUtil.isEmpty(interview.getState())){
+			interview.setState("0");
 		}
 		interviewService.save(interview);
 		addMessage(redirectAttributes, "保存面试成功");

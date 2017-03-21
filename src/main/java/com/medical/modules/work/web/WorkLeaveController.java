@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,7 +74,7 @@ public class WorkLeaveController extends BaseController {
 		return "modules/work/workLeaveInfo";
 	}
 
-	@RequiresPermissions("work:workLeave:edit")
+	@RequiresPermissions(value={"work:workLeave:edit", "work:workLeave:add"}, logical=Logical.OR)
 	@RequestMapping(value = "save")
 	public String save(WorkLeave workLeave, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, workLeave)){

@@ -44,6 +44,6 @@ public interface WorkLeaveDao extends CrudDao<WorkLeave> {
 	 * @param workLeave
 	 * @return
 	 */
-	int findManagerCount(WorkLeave workLeave);
+	int findAuditCount(WorkLeave workLeave);
 	
 }

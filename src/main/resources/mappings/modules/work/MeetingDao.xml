@@ -50,6 +50,9 @@
 					<if test="dbName == 'mssql'">'%'+#{theme}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{theme},'%')</if>
 			</if>
+			<if test="currentUser.adminFlag != '1'">
+				and (instr(concat(',', participant, ','), CONCAT(',',#{currentUser.id},',')) > 0 or recorder = #{currentUser.id})
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -141,7 +144,7 @@
 		<include refid="meetingJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			and instr(','||participant||',', ','||#{currentUser.id}||',') > 0
+			and (instr(concat(',', participant, ','), CONCAT(',',#{currentUser.id},',')) > 0 or recorder = #{currentUser.id})
 			<![CDATA[ and CURDATE() <= meeting_time ]]> 
 		</where>
 	</select>

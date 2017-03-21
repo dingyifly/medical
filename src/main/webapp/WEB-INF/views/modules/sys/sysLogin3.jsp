@@ -87,6 +87,8 @@
 <SCRIPT src=""></SCRIPT>
 <![endif]-->
 	<script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.8.3.js"></script>
+	<%-- <link href="${ctxStatic}/jquery-validation/1.11.0/jquery.validate.min.css" type="text/css" rel="stylesheet" /> --%>
+	<script src="${ctxStatic}/jquery-validation/1.11.0/jquery.validate.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#loginForm").validate({

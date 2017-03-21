@@ -260,7 +260,9 @@
 		var todoWin;
 		var timer;
 		$(function(){
-			backlog();
+			if ('${fns:getUser().id}' != '1') {
+				backlog();
+			}
 		});
 		function backlog() {
 			if (!todoWin && todoWin != null) {

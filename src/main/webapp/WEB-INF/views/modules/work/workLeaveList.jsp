@@ -19,7 +19,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/work/workLeave/">请假列表</a></li>
-		<shiro:hasPermission name="work:workLeave:edit"><li><a href="${ctx}/work/workLeave/form">请假添加</a></li></shiro:hasPermission>
+		<shiro:hasAnyPermissions name="work:workLeave:edit,work:workLeave:add"><li><a href="${ctx}/work/workLeave/form">请假添加</a></li></shiro:hasAnyPermissions>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workLeave" action="${ctx}/work/workLeave/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

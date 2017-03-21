@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.google.common.collect.Lists;
 import com.medical.common.web.BaseController;
 import com.medical.modules.sys.entity.Backlog;
+import com.medical.modules.sys.security.SecuritySelfUtils;
 import com.medical.modules.sys.utils.UserUtils;
 import com.medical.modules.work.entity.Calendar;
 import com.medical.modules.work.entity.Interview;
@@ -49,12 +50,17 @@ public class BacklogController extends BaseController {
 	
 	@RequestMapping(value = {"backlog", ""})
 	public String backlog(HttpServletRequest request, HttpServletResponse response, Model model) {
+		if ("1".equals(UserUtils.getUser().getId())) return "modules/sys/backlogList";
 		List<Backlog> list = Lists.newArrayList();
 //		SecurityUtils.getSubject().isPermitted("");
-		interviewCount(list);
+		if (SecuritySelfUtils.hasAnyPermission("work:interview:handle,work:interview:edit")) {
+			interviewCount(list);
+		}
 		calendarCount(list);
 		meetingCount(list);
-		reagentCount(list);
+		if (SecuritySelfUtils.hasAnyPermission("work:reagent:audit")) {
+			reagentCount(list);
+		}
 		leaveCount(list);
 		model.addAttribute("backlogList", list);
 		return "modules/sys/backlogList";
@@ -67,8 +73,12 @@ public class BacklogController extends BaseController {
 	private void interviewCount(List<Backlog> list) {
 		if (UserUtils.hasRole(UserUtils.getUser(), "dmanager")) {
 			Interview in = new Interview();
-			in.setOffice(UserUtils.getUser().getOffice());
-			in.setState("0");
+			if (!UserUtils.hasRole(UserUtils.getUser(), "hr-manager")) {
+				in.setOffice(UserUtils.getUser().getOffice());
+				in.setState("0");
+			} else {
+				in.setState("1");
+			}
 			int num = interviewService.getToDoCount(in);
 			if (num != 0) {
 				Backlog l = new Backlog(num, "待面试", "work/interview/");

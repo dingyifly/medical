@@ -70,7 +70,7 @@ public class WorkLeaveService extends CrudService<WorkLeaveDao, WorkLeave> {
 		if (UserUtils.hasRole(workLeave.getCurrentUser(), "manager") || workLeave.getCurrentUser().isAdmin()) {
 			return dao.findManagerAuditCount(workLeave);
 		} else {
-			return dao.findManagerCount(workLeave);
+			return dao.findAuditCount(workLeave);
 		}
 	}
 	

@@ -28,7 +28,17 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/work/workLeave/">请假列表</a></li>
-		<li class="active"><a href="${ctx}/work/workLeave/form?id=${workLeave.id}">请假<shiro:hasPermission name="work:workLeave:edit">${not empty workLeave.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="work:workLeave:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active">
+			<a href="${ctx}/work/workLeave/form?id=${workLeave.id}">请假
+			<c:if test="${not empty workLeave.id}">
+				<shiro:hasPermission name="work:workLeave:edit">修改</shiro:hasPermission>
+				<shiro:lacksPermission name="work:workLeave:edit">查看</shiro:lacksPermission>
+			</c:if>
+			<c:if test="${empty workLeave.id}">
+				添加
+			</c:if>
+			</a>
+		</li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="workLeave" action="${ctx}/work/workLeave/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -77,7 +87,16 @@
 			</div>
 		</div> --%>
 		<div class="form-actions">
-			<shiro:hasPermission name="work:workLeave:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasAnyPermissions name="work:workLeave:edit">
+				<c:if test="${not empty workLeave.id}">
+					<shiro:lacksPermission name="work:workLeave:edit">
+						<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;
+					</shiro:lacksPermission>
+				</c:if>
+				<c:if test="${empty workLeave.id}">
+					<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;
+				</c:if>
+			</shiro:hasAnyPermissions>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
