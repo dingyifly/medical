@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50521
 File Encoding         : 65001
 
-Date: 2017-03-22 18:20:22
+Date: 2017-03-23 18:05:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -6049,6 +6049,87 @@ CREATE TABLE `work_meeting` (
 -- ----------------------------
 INSERT INTO `work_meeting` VALUES ('16f1998e73454b4781c6901d6b47c365', '2017-03-22', '92ba5b356b694dd688a03d5b431c228f', '测试会议', 'd228490752ff478698d1cdc32f2c4cf5,1f339931292444aa951594e5d9afa2c8,1d74db74cdbe45df978711cb78185dab,92ba5b356b694dd688a03d5b431c228f,b65af2509f7a484ca9799325f0d0c708,9ec3ff9158ca4e99aa4a49974d410c77', '', 'b65af2509f7a484ca9799325f0d0c708', '', '1', '2017-03-21 14:45:45', '1', '2017-03-21 14:45:45', null, '0');
 INSERT INTO `work_meeting` VALUES ('ae1e626c9e3e41fb833f582eeef6c990', '2017-03-01', '1', '第一次会议', '1,2,b65af2509f7a484ca9799325f0d0c708', '领导谈话', 'b65af2509f7a484ca9799325f0d0c708', '', '1', '2017-03-01 09:52:58', '1', '2017-03-01 14:57:57', '', '0');
+
+-- ----------------------------
+-- Table structure for `work_project`
+-- ----------------------------
+DROP TABLE IF EXISTS `work_project`;
+CREATE TABLE `work_project` (
+  `id` varchar(64) NOT NULL COMMENT '编号',
+  `no` varchar(64) DEFAULT NULL COMMENT '项目编号',
+  `name` varchar(100) DEFAULT NULL COMMENT '项目名称',
+  `principal` varchar(64) DEFAULT NULL COMMENT '项目负责人',
+  `state` char(2) DEFAULT NULL COMMENT '状态',
+  `investigation_report` text COMMENT '调研报告',
+  `cost_budgeting` text COMMENT '成本预算',
+  `test_flag` char(1) DEFAULT NULL COMMENT '开发状态',
+  `small_num` int(5) DEFAULT NULL COMMENT '小试次数',
+  `middle_num` int(5) DEFAULT NULL COMMENT '中试次数',
+  `large_num` int(5) DEFAULT NULL COMMENT '发大次数',
+  `bonus_record` text COMMENT '奖金发放记录',
+  `summary` text COMMENT '总结',
+  `create_by` varchar(64) NOT NULL COMMENT '创建者',
+  `create_date` datetime NOT NULL COMMENT '创建时间',
+  `update_by` varchar(64) NOT NULL COMMENT '更新者',
+  `update_date` datetime NOT NULL COMMENT '更新时间',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
+  `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标记',
+  PRIMARY KEY (`id`),
+  KEY `test_data_del_flag` (`del_flag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目管理';
+
+-- ----------------------------
+-- Records of work_project
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `work_project_develop`
+-- ----------------------------
+DROP TABLE IF EXISTS `work_project_develop`;
+CREATE TABLE `work_project_develop` (
+  `id` varchar(64) NOT NULL COMMENT '编号',
+  `project_id` varchar(64) DEFAULT NULL COMMENT '项目id',
+  `project_no` varchar(64) DEFAULT NULL COMMENT '项目编号',
+  `test_flag` char(255) DEFAULT NULL COMMENT '开发状态',
+  `num` int(5) DEFAULT NULL COMMENT '次数',
+  `summary` text COMMENT '总结',
+  `create_by` varchar(64) NOT NULL COMMENT '创建者',
+  `create_date` datetime NOT NULL COMMENT '创建时间',
+  `update_by` varchar(64) NOT NULL COMMENT '更新者',
+  `update_date` datetime NOT NULL COMMENT '更新时间',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
+  `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标记',
+  PRIMARY KEY (`id`),
+  KEY `test_data_del_flag` (`del_flag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目开发进度表';
+
+-- ----------------------------
+-- Records of work_project_develop
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `work_project_report`
+-- ----------------------------
+DROP TABLE IF EXISTS `work_project_report`;
+CREATE TABLE `work_project_report` (
+  `id` varchar(64) NOT NULL COMMENT '编号',
+  `develop_id` varchar(64) DEFAULT NULL COMMENT '开发进度id',
+  `user_id` varchar(64) DEFAULT NULL COMMENT '操作用户',
+  `week_report` text COMMENT '周报',
+  `step_summary` text COMMENT '单步总结',
+  `create_by` varchar(64) NOT NULL COMMENT '创建者',
+  `create_date` datetime NOT NULL COMMENT '创建时间',
+  `update_by` varchar(64) NOT NULL COMMENT '更新者',
+  `update_date` datetime NOT NULL COMMENT '更新时间',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
+  `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标记',
+  PRIMARY KEY (`id`),
+  KEY `test_data_del_flag` (`del_flag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='开发工作报告';
+
+-- ----------------------------
+-- Records of work_project_report
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `work_reagent`
