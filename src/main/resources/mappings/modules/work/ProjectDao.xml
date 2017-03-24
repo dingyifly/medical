@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.ProjectDao">
+    
+	<sql id="projectColumns">
+		a.id AS "id",
+		a.no AS "no",
+		a.name AS "name",
+		a.principal AS "principal.id",
+		a.lvl AS "lvl",
+		a.state AS "state",
+		a.investigation_report AS "investigationReport",
+		a.cost_budgeting AS "costBudgeting",
+		a.dev_flag AS "devFlag",
+		a.small_num AS "smallNum",
+		a.middle_num AS "middleNum",
+		a.large_num AS "largeNum",
+		a.bonus_record AS "bonusRecord",
+		a.summary AS "summary",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u4.name AS "principal.name"
+	</sql>
+	
+	<sql id="projectJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.principal
+	</sql>
+    
+	<select id="get" resultType="Project">
+		SELECT 
+			<include refid="projectColumns"/>
+		FROM work_project a
+		<include refid="projectJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Project">
+		SELECT 
+			<include refid="projectColumns"/>
+		FROM work_project a
+		<include refid="projectJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Project">
+		SELECT 
+			<include refid="projectColumns"/>
+		FROM work_project a
+		<include refid="projectJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_project(
+			id,
+			no,
+			name,
+			principal,
+			lvl,
+			state,
+			investigation_report,
+			cost_budgeting,
+			dev_flag,
+			small_num,
+			middle_num,
+			large_num,
+			bonus_record,
+			summary,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{no},
+			#{name},
+			#{principal.id},
+			#{lvl},
+			#{state},
+			#{investigationReport},
+			#{costBudgeting},
+			#{devFlag},
+			#{smallNum},
+			#{middleNum},
+			#{largeNum},
+			#{bonusRecord},
+			#{summary},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_project SET 	
+			no = #{no},
+			name = #{name},
+			principal = #{principal.id},
+			lvl = #{lvl},
+			investigation_report = #{investigationReport},
+			cost_budgeting = #{costBudgeting},
+			dev_flag = #{devFlag},
+			small_num = #{smallNum},
+			middle_num = #{middleNum},
+			large_num = #{largeNum},
+			summary = #{summary},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_project SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

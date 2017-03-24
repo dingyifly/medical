@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medical.modules.work.dao.ProjectDevelopDao">
+    
+	<sql id="projectDevelopColumns">
+		a.id AS "id",
+		a.project_id AS "project.id",
+		a.project_no AS "projectNo",
+		a.test_flag AS "testFlag",
+		a.num AS "num",
+		a.summary AS "summary",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		b.name AS "project.name"
+	</sql>
+	
+	<sql id="projectDevelopJoins">
+		LEFT JOIN work_project b ON b.id = a.project_id
+	</sql>
+    
+	<select id="get" resultType="ProjectDevelop">
+		SELECT 
+			<include refid="projectDevelopColumns"/>
+		FROM work_project_develop a
+		<include refid="projectDevelopJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProjectDevelop">
+		SELECT 
+			<include refid="projectDevelopColumns"/>
+		FROM work_project_develop a
+		<include refid="projectDevelopJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="project != null and project.id != null and project.id != ''">
+				AND a.project_id = #{project.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProjectDevelop">
+		SELECT 
+			<include refid="projectDevelopColumns"/>
+		FROM work_project_develop a
+		<include refid="projectDevelopJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_project_develop(
+			id,
+			project_id,
+			project_no,
+			test_flag,
+			num,
+			summary,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{project.id},
+			#{projectNo},
+			#{testFlag},
+			#{num},
+			#{summary},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_project_develop SET 	
+			project_id = #{project.id},
+			project_no = #{projectNo},
+			test_flag = #{testFlag},
+			num = #{num},
+			summary = #{summary},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_project_develop SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE project_id = #{project.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>
